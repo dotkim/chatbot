@@ -14,9 +14,17 @@ class HueController {
     data.lights.forEach((light) => {
       arr.push(light.id, light.state.on);
     });
-    console.log(arr);
     return arr;
   }
+  
+  setState(lightID, state) {
+    try {
+      api.setLightState(lightID, { on: state});
+    }
+    catch (error) {
+      console.error(error);
+    }
+  };
 }
 
 module.exports = HueController;

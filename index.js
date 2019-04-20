@@ -11,7 +11,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.0.1', type: 'STREAMING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.0.3', type: 'STREAMING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -19,18 +19,20 @@ client.on('ready', () => {
 client.on('message', async (message) => {
   try {
     if (message.content.startsWith('!')) {
+      console.log(message.content);
       // get the keywords from the datafile, parse the message for the keyword.
       let keywords = await data.getKeywords();
       let keyword = await parse.get(message.content);
-  
+      console.log(keywords[keyword]);
+
       if (keywords[keyword]) {
         let keywordarr = keywords[keyword];         // create an array of the keyword data
         let rand = getRandomInt(keywordarr.length); // get a random int for indexing the array
-  
+
         message.channel.send(keywordarr[rand]);
       }
     }
-  
+
     if (message.content.startsWith('+add')) {
       let add = await parse.add(message.content);
       data.addKeyword(add[1], add[2]);
@@ -41,19 +43,48 @@ client.on('message', async (message) => {
         console.error(error);
       }
       message.channel.send(add[1] + ' - ' + add[2]);
+      data.getKeywords();
     }
 
-    if (data.users[message.author.id] === 'admin' && message.content.startsWith('.hue')) {
-      let cmd = await parse.hue(message.content);
-      if (cmd[0] == 'get') {
-        let data = hue.getState();
-        data.forEach((light) => {
-          
-        });
+    if (message.content.startsWith('.hue')) {
+      let users = await data.getUsers();
+      if (users[message.author.id] === 'admin') {
+        let cmd = await parse.hue(message.content);
+        console.log(cmd[0]);
+        if (cmd[1] == 'get') {
+          let data = await hue.getState();
+          let reply = '';
+          for (let i = 0; i < data.length; i += 2) {
+            let state;
+            if (data[i + 1]) {
+              state = ':large_blue_circle:';
+            }
+            else {
+              state = ':red_circle:';
+            }
+            reply += '`' + data[i] + '`:\t' + state + '\n'
+          }
+          message.channel.send(reply);
+        }
+  
+        if (cmd[1] == 'set') {
+          try {
+            console.log(cmd);
+            let state;
+            if (cmd[3] == 'on') {
+              state = true;
+            }
+            else if (cmd[3] == 'off') {
+              state = false;
+            }
+            hue.setState(cmd[2], state);
+          }
+          catch (error) {
+            console.error(error);
+          }
+        }
       }
     }
-
-    
   }
   catch (error) {
     console.error(error);
