@@ -11,7 +11,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.0.3', type: 'STREAMING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.0.4', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -23,6 +23,7 @@ client.on('message', async (message) => {
       // get the keywords from the datafile, parse the message for the keyword.
       let keywords = await data.getKeywords();
       let keyword = await parse.get(message.content);
+      keyword = keyword.toLowerCase();  // make the keyword lowercase
       console.log(keywords[keyword]);
 
       if (keywords[keyword]) {
@@ -35,7 +36,7 @@ client.on('message', async (message) => {
 
     if (message.content.startsWith('+add')) {
       let add = await parse.add(message.content);
-      data.addKeyword(add[1], add[2]);
+      data.addKeyword(add[1].toLowerCase(), add[2]);
       try {
         message.delete(5000);
       }
@@ -69,7 +70,6 @@ client.on('message', async (message) => {
   
         if (cmd[1] == 'set') {
           try {
-            console.log(cmd);
             let state;
             if (cmd[3] == 'on') {
               state = true;
