@@ -10,16 +10,29 @@ class HueController {
   async getState() {
     let data = await api.getLights();
     // build the response array
-    let arr = [];
+    let reply = '';
     data.lights.forEach((light) => {
-      arr.push(light.id, light.state.on);
+      let state;
+      if (light.state.on) {
+        state = ':large_blue_circle:';
+      }
+      else {
+        state = ':red_circle:';
+      }
+      reply += '`' + light.id + '`:\t' + state + '\t' + light.name + '\n';
     });
-    return arr;
+    return reply;
   }
-  
+
   setState(lightID, state) {
     try {
-      api.setLightState(lightID, { on: state});
+      if (state === 'on') {
+        state = true;
+      }
+      else if (state === 'off') {
+        state = false;
+      }
+      api.setLightState(lightID, { on: state });
     }
     catch (error) {
       console.error(error);

@@ -21,8 +21,11 @@ client.on('message', async (message) => {
   try {
     // this is where the keywords with ! at the begining is handled.
     if (message.content.startsWith('!')) {
+
       console.log('got message: ', message.content);
+
       // get the keywords from the datafile, parse the message for the keyword.
+
       let keywords = await data.getKeywords();
       let keyword = await parse.get(message.content);
       keyword = keyword.toLowerCase();  // make the keyword lowercase
@@ -46,13 +49,16 @@ client.on('message', async (message) => {
     // TODO: make the add keyword take multi line. Seems like my regex can't parse multiline.
     if (message.content.startsWith('+add')) {
       let add = await parse.add(message.content);
+
       data.addKeyword(add[1].toLowerCase(), add[2]);
+
       try {
         message.delete(5000);
       }
       catch (error) {
         console.error(error);
       }
+
       message.channel.send(add[1] + ' - ' + add[2]);
       data.getKeywords();
     }
@@ -60,34 +66,19 @@ client.on('message', async (message) => {
     // TODO: change the way we get ligths with api.lights instead of api.getLights.
     if (message.content.startsWith('.hue')) {
       let users = await data.getUsers();
+
       if (users[message.author.id] === 'admin') {
         let cmd = await parse.hue(message.content);
+
         console.log(cmd[0]);
+        
         if (cmd[1] == 'get') {
-          let data = await hue.getState();
-          let reply = '';
-          for (let i = 0; i < data.length; i += 2) {
-            let state;
-            if (data[i + 1]) {
-              state = ':large_blue_circle:';
-            }
-            else {
-              state = ':red_circle:';
-            }
-            reply += '`' + data[i] + '`:\t' + state + '\n'
-          }
+          let reply = await hue.getState();
           message.channel.send(reply);
         }
 
         if (cmd[1] == 'set') {
           try {
-            let state;
-            if (cmd[3] == 'on') {
-              state = true;
-            }
-            else if (cmd[3] == 'off') {
-              state = false;
-            }
             hue.setState(cmd[2], state);
           }
           catch (error) {
