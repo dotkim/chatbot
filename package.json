@@ -1,7 +1,7 @@
 {
   "name": "chatbot",
-  "version": "3.0.3",
-  "description": "",
+  "version": "3.0.6",
+  "description": "Beep boop",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,6 +11,11 @@
   "dependencies": {
     "discord.js": "^11.4.2",
     "dotenv": "^7.0.0",
-    "node-hue-api": "^2.4.4"
+    "node-hue-api": "^2.4.4",
+    "soundex": "^0.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dotkim/chatbot.git"
   }
 }
