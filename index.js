@@ -12,7 +12,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.0.5', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.0.6', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -71,7 +71,7 @@ client.on('message', async (message) => {
         let cmd = await parse.hue(message.content);
 
         console.log(cmd[0]);
-        
+
         if (cmd[1] == 'get') {
           let reply = await hue.getState();
           message.channel.send(reply);
