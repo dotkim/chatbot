@@ -13,13 +13,16 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.0.7', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.1.0', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
 
 client.on('message', async (message) => {
   try {
+
+    if (message.author.bot) return;
+
     // if there is an attachment save it to a provided Dir.
     console.log('message:', message.id, message.author.username, message.content);
     if (!message.attachments.size == 0) {
