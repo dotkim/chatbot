@@ -66,7 +66,7 @@ client.on('message', async (message) => {
     if (message.content.startsWith('+edit')) {
       let edit = await parse.edit(message.content);
       let result = await data.editKeyword(edit[1], edit[2]);
-      if (result === 1) message.channel.send('editing: ' + edit[1] + 'new key: ' + edit[2]);
+      if (result === 1) message.channel.send('editing: ' + edit[1] + ' new key: ' + edit[2]);
       else if (result === 0) message.channel.send('keywords are alike, did nothing.');
     }
 
