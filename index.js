@@ -12,7 +12,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.0.6', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.0.7', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -49,18 +49,25 @@ client.on('message', async (message) => {
     // TODO: make the add keyword take multi line. Seems like my regex can't parse multiline.
     if (message.content.startsWith('+add')) {
       let add = await parse.add(message.content);
-
+      
       data.addKeyword(add[1].toLowerCase(), add[2]);
-
+      
       try {
         message.delete(5000);
       }
       catch (error) {
         console.error(error);
       }
-
+      
       message.channel.send(add[1] + ' - ' + add[2]);
       data.getKeywords();
+    }
+    
+    if (message.content.startsWith('+edit')) {
+      let edit = await parse.edit(message.content);
+      let result = await data.editKeyword(edit[1], edit[2]);
+      if (result === 1) message.channel.send('editing: ' + edit[1] + 'new key: ' + edit[2]);
+      else if (result === 0) message.channel.send('keywords are alike, did nothing.');
     }
 
     // TODO: change the way we get ligths with api.lights instead of api.getLights.

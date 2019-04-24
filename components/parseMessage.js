@@ -10,6 +10,12 @@ class Parse {
     let result = regex.exec(message);
     return result;
   }
+  
+  edit(message) {
+    let regex = /\+edit\ (\w+)\ (\w+)/gi;
+    let result = regex.exec(message);
+    return result;
+  }
 
   hue(message) {
     let regex = /\.hue\ (\w+)\ (\w+)\ (\w+)/gi;

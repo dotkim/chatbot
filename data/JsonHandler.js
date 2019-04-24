@@ -5,7 +5,7 @@ class JsonHandler {
     //let data = require('./data.json');
     try {
       fs.readFile('./data/data.json', (err, data) => {
-        if (err) throw(err);
+        if (err) throw (err);
         let json = JSON.parse(data);
         if (!json.keywords[keyword]) {
           json.keywords[keyword] = [content];
@@ -17,7 +17,7 @@ class JsonHandler {
           list.push(content);
           fs.writeFileSync('./data/data.json', JSON.stringify(json, 3, 2));
           return keyword, content;
-        }  
+        }
       });
     }
     catch (error) {
@@ -33,11 +33,28 @@ class JsonHandler {
     let json = JSON.parse(data);
     return json.keywords;
   }
-  
+
   async getUsers() {
     let data = await fs.readFileSync('./data/data.json');
     let json = JSON.parse(data);
     return json.users;
+  }
+
+  async editKeyword(edit, newWord) {
+    let data = await fs.readFileSync('./data/data.json');
+    let json = JSON.parse(data);
+    if (edit !== newWord) {
+      console.log('editing:', edit, 'new key:', newWord);
+      Object.defineProperty(json.keywords, newWord,
+        Object.getOwnPropertyDescriptor(json.keywords, edit));
+      delete json.keywords[edit];
+      fs.writeFileSync('./data/data.json', JSON.stringify(json, 3, 2));
+      return 1;
+    }
+    else {
+      console.log('keywords are not different');
+      return 0;
+    }
   }
 }
 
