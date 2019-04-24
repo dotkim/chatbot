@@ -20,6 +20,9 @@ client.on('ready', () => {
 
 client.on('message', async (message) => {
   try {
+
+    if (message.author.bot) return;
+
     // if there is an attachment save it to a provided Dir.
     console.log('message:', message.id, message.author.username, message.content);
     if (!message.attachments.size == 0) {
