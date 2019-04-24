@@ -5,6 +5,7 @@ const Parse = require('./components/parseMessage.js');
 const getRandomInt = require('./components/getRandomInt.js');
 const HueController = require('./components/hue.js');
 const soundCompare = require('./components/keywordCompare.js');
+const attchFetch = require('./components/fetchAttachments.js');
 
 const client = new Discord.Client();
 const data = new JsonHandler();
@@ -19,11 +20,14 @@ client.on('ready', () => {
 
 client.on('message', async (message) => {
   try {
+    // if there is an attachment save it to a provided Dir.
+    console.log('message:', message.id, message.author.username, message.content);
+    if (!message.attachments.size == 0) {
+      attchFetch(message.attachments);
+    }
+
     // this is where the keywords with ! at the begining is handled.
     if (message.content.startsWith('!')) {
-
-      console.log('got message: ', message.content);
-
       // get the keywords from the datafile, parse the message for the keyword.
 
       let keywords = await data.getKeywords();
@@ -49,20 +53,20 @@ client.on('message', async (message) => {
     // TODO: make the add keyword take multi line. Seems like my regex can't parse multiline.
     if (message.content.startsWith('+add')) {
       let add = await parse.add(message.content);
-      
+
       data.addKeyword(add[1].toLowerCase(), add[2]);
-      
+
       try {
         message.delete(5000);
       }
       catch (error) {
         console.error(error);
       }
-      
+
       message.channel.send(add[1] + ' - ' + add[2]);
       data.getKeywords();
     }
-    
+
     if (message.content.startsWith('+edit')) {
       let edit = await parse.edit(message.content);
       let result = await data.editKeyword(edit[1], edit[2]);
@@ -76,8 +80,6 @@ client.on('message', async (message) => {
 
       if (users[message.author.id] === 'admin') {
         let cmd = await parse.hue(message.content);
-
-        console.log(cmd[0]);
 
         if (cmd[1] == 'get') {
           let reply = await hue.getState();
