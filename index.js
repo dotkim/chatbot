@@ -13,7 +13,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.0.7', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.1.0', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
