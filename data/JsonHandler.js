@@ -33,11 +33,11 @@ class JsonHandler {
     let json = JSON.parse(data);
     return json.keywords;
   }
-
-  async getUsers() {
+  
+  async getUser(id) {
     let data = await fs.readFileSync('./data/data.json');
     let json = JSON.parse(data);
-    return json.users;
+    return json.users[id];
   }
 
   async editKeyword(edit, newWord) {

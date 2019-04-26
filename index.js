@@ -6,6 +6,7 @@ const getRandomInt = require('./components/getRandomInt.js');
 const HueController = require('./components/hue.js');
 const soundCompare = require('./components/keywordCompare.js');
 const attchFetch = require('./components/fetchAttachments.js');
+const wol = require('./components/wakeOnLan.js');
 
 const client = new Discord.Client();
 const data = new JsonHandler();
@@ -13,7 +14,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.1.1', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.1.3 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -86,9 +87,8 @@ client.on('message', async (message) => {
       else if (result === 0) message.channel.send('keywords are alike, did nothing.');
     }
 
-    // TODO: change the way we get ligths with api.lights instead of api.getLights.
     if (message.content.startsWith('.hue')) {
-      let users = await data.getUsers();
+      let user = await data.getUser(message.author.id);
       
       if (users[message.author.id] === 'admin') {
         let cmd = await parse.hue(message.content);
@@ -108,11 +108,23 @@ client.on('message', async (message) => {
         }
       }
     }
+        let res = await wol(user.mac);
+        if (res) message.channel.send('sent magic packet to IF' + mac);
+      }
+      else {
+        // user is not admin or doesnt have mac
+        if ((user.type !== 'admin') || (!user.type)) message.channel.send('not admin lel noob');
+        if (!user.mac) message.channel.send('*He doesn\'t have a mac :joy:');
+      }
+    }
     
     if (message.content.startsWith('.help')) {
       // give a list of commands.
       let keywords = await data.getKeywords();
-
+      let add = '**+add**\n`+add kodeord tekst`\nLegger til et kodeord for bruk med "!"\n';
+      let edit = '**+edit**\n`+edit kodeord endring`\nEndret ett kodeord, første er kodeordet som skal endres, andre er det det skal endres til\n';
+      let cmdList = 'Liste over ! kommandoer:' + Object.keys(keywords).toString().replace(/\,/g, ', '); + '\n';
+      message.channel.send(add + edit + cmdList);
     }
     
   }
