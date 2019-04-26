@@ -90,7 +90,7 @@ client.on('message', async (message) => {
     if (message.content.startsWith('.hue')) {
       let user = await data.getUser(message.author.id);
       
-      if (users[message.author.id] === 'admin') {
+      if (user.type === 'admin') {
         let cmd = await parse.hue(message.content);
         
         if (cmd[1] == 'get') {
@@ -108,6 +108,10 @@ client.on('message', async (message) => {
         }
       }
     }
+
+    if (message.content.startsWith('.wol')) {
+      let user = data.getUser(message.author.id);
+      if ((user.type === 'admin') || (user.mac)) {
         let res = await wol(user.mac);
         if (res) message.channel.send('sent magic packet to IF' + mac);
       }
