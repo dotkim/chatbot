@@ -14,7 +14,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.1.3 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.1.4 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -34,7 +34,8 @@ client.on('message', async (message) => {
       (message.content.includes('donuts')) ||
       (message.content.includes('cheeseburgers')) ||
       (message.content.includes('bog collection')) ||
-      (message.content.includes('hotdogs'))
+      (message.content.includes('hotdogs')) ||
+      (message.content.includes('bar fightn'))
     ) {
       message.channel.send('byeh');
     }
@@ -118,7 +119,7 @@ client.on('message', async (message) => {
       else {
         // user is not admin or doesnt have mac
         if ((user.type !== 'admin') || (!user.type)) message.channel.send('not admin lel noob');
-        if (!user.mac) message.channel.send('*He doesn\'t have a mac :joy:');
+        if (!user.mac) message.channel.send('*He doesn\'t have a mac* :joy:');
       }
     }
     
@@ -127,7 +128,7 @@ client.on('message', async (message) => {
       let keywords = await data.getKeywords();
       let add = '**+add**\n`+add kodeord tekst`\nLegger til et kodeord for bruk med "!"\n';
       let edit = '**+edit**\n`+edit kodeord endring`\nEndret ett kodeord, første er kodeordet som skal endres, andre er det det skal endres til\n';
-      let cmdList = 'Liste over ! kommandoer:' + Object.keys(keywords).toString().replace(/\,/g, ', '); + '\n';
+      let cmdList = 'Liste over ! kommandoer: ' + Object.keys(keywords).toString().replace(/\,/g, ', '); + '\n';
       message.channel.send(add + edit + cmdList);
     }
     
