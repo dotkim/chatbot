@@ -114,7 +114,7 @@ client.on('message', async (message) => {
       let user = await data.getUser(message.author.id);
       if ((user.type === 'admin') && (user.mac)) {
         let res = await wol(user.mac);
-        if (res) message.channel.send('sent magic packet to IF' + user.mac);
+        if (res) message.channel.send('sent magic packet to IF: ' + user.mac);
       }
       else {
         // user is not admin or doesnt have mac
