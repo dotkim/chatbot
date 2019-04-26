@@ -34,7 +34,8 @@ client.on('message', async (message) => {
       (message.content.includes('donuts')) ||
       (message.content.includes('cheeseburgers')) ||
       (message.content.includes('bog collection')) ||
-      (message.content.includes('hotdogs'))
+      (message.content.includes('hotdogs')) ||
+      (message.content.includes('bar fightn'))
     ) {
       message.channel.send('byeh');
     }
