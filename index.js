@@ -13,7 +13,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.1.0', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.1.1', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -27,6 +27,15 @@ client.on('message', async (message) => {
     console.log('message:', message.id, message.author.username, message.content);
     if (!message.attachments.size == 0) {
       attchFetch(message.attachments);
+    }
+
+    if (
+      (message.content.includes('donuts')) ||
+      (message.content.includes('cheeseburgers')) ||
+      (message.content.includes('bog collection')) ||
+      (message.content.includes('hotdogs'))
+    ) {
+      message.channel.send('byeh');
     }
 
     // this is where the keywords with ! at the begining is handled.
@@ -80,15 +89,15 @@ client.on('message', async (message) => {
     // TODO: change the way we get ligths with api.lights instead of api.getLights.
     if (message.content.startsWith('.hue')) {
       let users = await data.getUsers();
-
+      
       if (users[message.author.id] === 'admin') {
         let cmd = await parse.hue(message.content);
-
+        
         if (cmd[1] == 'get') {
           let reply = await hue.getState();
           message.channel.send(reply);
         }
-
+        
         if (cmd[1] == 'set') {
           try {
             hue.setState(cmd[2], state);
@@ -99,6 +108,13 @@ client.on('message', async (message) => {
         }
       }
     }
+    
+    if (message.content.startsWith('.help')) {
+      // give a list of commands.
+      let keywords = await data.getKeywords();
+
+    }
+    
   }
   catch (error) {
     console.error(error);
