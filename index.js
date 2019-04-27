@@ -32,16 +32,16 @@ client.on('message', async (message) => {
     }
 
     if (
-      (message.content.includes('donuts')) ||
-      (message.content.includes('cheeseburgers')) ||
-      (message.content.includes('bog collection')) ||
-      (message.content.includes('hotdogs')) ||
-      (message.content.includes('bar fightn'))
+      (message.content.toLowerCase().includes('donuts')) ||
+      (message.content.toLowerCase().includes('cheeseburgers')) ||
+      (message.content.toLowerCase().includes('bog collection')) ||
+      (message.content.toLowerCase().includes('hotdogs')) ||
+      (message.content.toLowerCase().includes('bar fightn'))
     ) {
       message.channel.send('byeh');
     }
 
-    if (message.content.includes('cry')) {
+    if (message.content.toLowerCase().includes('cry')) {
       let obj = await imageHandler();
       console.log(obj);
       message.channel.send({
