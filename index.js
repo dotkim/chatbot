@@ -1,6 +1,7 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const JsonHandler = require('./data/JsonHandler.js');
+const imageHandler = require('./data/imageHandler.js');
 const Parse = require('./components/parseMessage.js');
 const getRandomInt = require('./components/getRandomInt.js');
 const HueController = require('./components/hue.js');
@@ -38,6 +39,17 @@ client.on('message', async (message) => {
       (message.content.includes('bar fightn'))
     ) {
       message.channel.send('byeh');
+    }
+
+    if (message.content.includes('cry')) {
+      let obj = await imageHandler();
+      console.log(obj);
+      message.channel.send({
+        files: [{
+          attachment: String(obj.path),
+          name: obj.name
+        }]
+      });
     }
 
     // this is where the keywords with ! at the begining is handled.
@@ -90,15 +102,15 @@ client.on('message', async (message) => {
 
     if (message.content.startsWith('.hue')) {
       let user = await data.getUser(message.author.id);
-      
+
       if (user.type === 'admin') {
         let cmd = await parse.hue(message.content);
-        
+
         if (cmd[1] == 'get') {
           let reply = await hue.getState();
           message.channel.send(reply);
         }
-        
+
         if (cmd[1] == 'set') {
           try {
             hue.setState(cmd[2], state);
@@ -114,7 +126,7 @@ client.on('message', async (message) => {
       let user = await data.getUser(message.author.id);
       if ((user.type === 'admin') && (user.mac)) {
         let res = await wol(user.mac);
-        if (res) message.channel.send('sent magic packet to IF' + user.mac);
+        if (res) message.channel.send('sent magic packet to IF: ' + user.mac);
       }
       else {
         // user is not admin or doesnt have mac
@@ -122,7 +134,7 @@ client.on('message', async (message) => {
         if (!user.mac) message.channel.send('*He doesn\'t have a mac* :joy:');
       }
     }
-    
+
     if (message.content.startsWith('.help')) {
       // give a list of commands.
       let keywords = await data.getKeywords();
@@ -131,7 +143,7 @@ client.on('message', async (message) => {
       let cmdList = 'Liste over ! kommandoer: ' + Object.keys(keywords).toString().replace(/\,/g, ', '); + '\n';
       message.channel.send(add + edit + cmdList);
     }
-    
+
   }
   catch (error) {
     console.error(error);
