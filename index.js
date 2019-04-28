@@ -15,7 +15,7 @@ const parse = new Parse();
 const hue = new HueController();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.1.4 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.1.6 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
