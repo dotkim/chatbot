@@ -13,9 +13,10 @@ const client = new Discord.Client();
 const data = new JsonHandler();
 const parse = new Parse();
 const hue = new HueController();
+const images = new imageHandler();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.1.6 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.1.7 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -32,17 +33,33 @@ client.on('message', async (message) => {
     }
 
     if (
-      (message.content.toLowerCase().includes('donuts')) ||
-      (message.content.toLowerCase().includes('cheeseburgers')) ||
+      (message.content.toLowerCase().includes('donut')) ||
+      (message.content.toLowerCase().includes('cheeseburger')) ||
       (message.content.toLowerCase().includes('bog collection')) ||
-      (message.content.toLowerCase().includes('hotdogs')) ||
+      (message.content.toLowerCase().includes('hotdog')) ||
       (message.content.toLowerCase().includes('bar fightn'))
     ) {
       message.channel.send('byeh');
     }
 
     if (message.content.toLowerCase().includes('cry')) {
-      let obj = await imageHandler();
+      let obj = await images.cats();
+      console.log(obj);
+      message.channel.send({
+        files: [{
+          attachment: String(obj.path),
+          name: obj.name
+        }]
+      });
+    }
+    
+    if (
+      (message.content.toLowerCase().includes('brainlet')) ||
+      (message.content.toLowerCase().includes('retard')) ||
+      (message.content.toLowerCase().includes('dust')) ||
+      (message.content.toLowerCase().includes('stupid'))
+      ) {
+      let obj = await images.brainlets();
       console.log(obj);
       message.channel.send({
         files: [{
