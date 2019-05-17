@@ -25,17 +25,14 @@ class Fetch {
       
       let url = regex.exec(str);
       if (url) {
-        
+        console.log('url found:', url[1]);
         let extension = url[1].split('.').pop();
         let path = process.env.FILEPATH + id + '.' + extension;
-        console.log('path:',path);
         
         if (url[3] === 'https://') {
           https.get(url[1], function (response) {
-            console.log('headers:', response.headers['content-type']);
             let imgRegex = /(image)\/\w/gi;
             let img = imgRegex.exec(response.headers['content-type']);
-            console.log('img:', img);
             if (!img) return;
 
             let file = fs.createWriteStream(path);
@@ -44,10 +41,8 @@ class Fetch {
         }
         else if (url[3] === 'http://') {
           http.get(url[1], function (response) {
-            console.log('headers:', response.headers['content-type']);
             let imgRegex = /(image)\/\w/gi;
             let img = imgRegex.exec(response.headers['content-type']);
-            console.log('img:', img);
             if (!img) return;
 
             let file = fs.createWriteStream(path);

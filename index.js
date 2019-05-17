@@ -33,11 +33,13 @@ client.on('message', async (message) => {
       fetch.attchFetch(message.attachments);
     }
 
+    // parse the message content to see if there is an URL in it
+    // if there is an URL, check if the content-type is an image and download it
     fetch.urlattch(message.content, message.id);
     
     if (
       (message.content.toLowerCase().includes('donut')) ||
-      (message.content.toLowerCase().includes('cheeseburger')) ||
+      (message.content.toLowerCase().includes('burger')) ||
       (message.content.toLowerCase().includes('bog collection')) ||
       (message.content.toLowerCase().includes('hotdog')) ||
       (message.content.toLowerCase().includes('bar fightn'))
