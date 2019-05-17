@@ -6,7 +6,7 @@ const Parse = require('./components/parseMessage.js');
 const getRandomInt = require('./components/getRandomInt.js');
 const HueController = require('./components/hue.js');
 const soundCompare = require('./components/keywordCompare.js');
-const attchFetch = require('./components/fetchAttachments.js');
+const ImgFetch = require('./components/fetchAttachments.js');
 const wol = require('./components/wakeOnLan.js');
 
 const client = new Discord.Client();
@@ -14,9 +14,10 @@ const data = new JsonHandler();
 const parse = new Parse();
 const hue = new HueController();
 const images = new imageHandler();
+const fetch = new ImgFetch();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.1.7 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.2.0 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -29,9 +30,11 @@ client.on('message', async (message) => {
     // if there is an attachment save it to a provided Dir.
     console.log('message:', message.id, message.author.username, message.content);
     if (!message.attachments.size == 0) {
-      attchFetch(message.attachments);
+      fetch.attchFetch(message.attachments);
     }
 
+    fetch.urlattch(message.content, message.id);
+    
     if (
       (message.content.toLowerCase().includes('donut')) ||
       (message.content.toLowerCase().includes('cheeseburger')) ||
