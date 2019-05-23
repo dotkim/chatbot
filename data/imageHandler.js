@@ -16,6 +16,13 @@ class imageHander {
     let img = files[rand];
     return { path: process.env.BRDIR + img, name: img };
   }
+
+  async dogs() {
+    let files = await fs.readdirSync(process.env.DOGDIR)
+    let rand = getRandomInt(files.length);
+    let img = files[rand];
+    return { path: process.env.DOGDIR + img, name: img };
+  }
 }
 
 

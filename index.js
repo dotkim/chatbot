@@ -17,7 +17,7 @@ const images = new imageHandler();
 const fetch = new ImgFetch();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.2.1 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.3.0 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -49,6 +49,17 @@ client.on('message', async (message) => {
 
     if (message.content.toLowerCase().includes('cry')) {
       let obj = await images.cats();
+      console.log(obj);
+      message.channel.send({
+        files: [{
+          attachment: String(obj.path),
+          name: obj.name
+        }]
+      });
+    }
+
+    if (message.content.toLowerCase().includes('dog')) {
+      let obj = await images.dogs();
       console.log(obj);
       message.channel.send({
         files: [{
