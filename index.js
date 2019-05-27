@@ -27,6 +27,10 @@ client.on('message', async (message) => {
 
     if (message.author.bot) return;
 
+    // thats true
+    thatstrue = getRandomInt(10);
+    if (thatstrue === 1) message.reply("That's true.");
+
     // if there is an attachment save it to a provided Dir.
     console.log('message:', message.id, message.author.username, message.content);
     if (!message.attachments.size == 0) {
