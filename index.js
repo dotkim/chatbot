@@ -17,7 +17,7 @@ const images = new imageHandler();
 const fetch = new ImgFetch();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.3.0 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.3.1 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -26,6 +26,10 @@ client.on('message', async (message) => {
   try {
 
     if (message.author.bot) return;
+
+    // thats true
+    thatstrue = getRandomInt(10);
+    if (thatstrue === 1) message.reply("That's true.");
 
     // if there is an attachment save it to a provided Dir.
     console.log('message:', message.id, message.author.username, message.content);
