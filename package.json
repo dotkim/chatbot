@@ -9,11 +9,11 @@
   "author": "Kim Nerli",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.5.1",
     "dotenv": "^7.0.0",
-    "node-hue-api": "^2.4.4",
+    "node-hue-api": "^2.4.5",
     "soundex": "^0.2.1",
-    "wol": "^1.0.5"
+    "wol": "^1.0.6"
   },
   "repository": {
     "type": "git",
