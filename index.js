@@ -17,7 +17,7 @@ const images = new imageHandler();
 const fetch = new ImgFetch();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.3.2 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.3.3 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -152,7 +152,7 @@ client.on('message', async (message) => {
 
         if (cmd[1] == 'set') {
           try {
-            hue.setState(cmd[2], state);
+            hue.setState(cmd[2], cmd[3]);
           }
           catch (error) {
             console.error(error);
