@@ -12,7 +12,11 @@ class Fetch {
       let file = fs.createWriteStream(path);
       https.get(attch.url, function (response) {
         response.pipe(file);
-        http.request(process.env.APIURL + '/insert' + file + '/Discord', { method: 'POST' });
+        http.request(process.env.APIURL + '/insert' + file + '/Discord',
+          { method: 'POST' },
+          function () {
+            console.log(file);
+          });
       });
     });
   }
@@ -39,7 +43,11 @@ class Fetch {
 
               let file = fs.createWriteStream(path);
               response.pipe(file);
-              http.request(process.env.APIURL + '/insert' + file + '/Discord', { method: 'POST' });
+              http.request(process.env.APIURL + '/insert' + file + '/Discord',
+                { method: 'POST' },
+                function () {
+                  console.log(file);
+                });
             });
           }
           catch (error) {
@@ -56,7 +64,11 @@ class Fetch {
 
               let file = fs.createWriteStream(path);
               response.pipe(file);
-              http.request(process.env.APIURL + '/insert' + file + '/Discord', { method: 'POST' });
+              http.request(process.env.APIURL + '/insert' + file + '/Discord',
+                { method: 'POST' },
+                function () {
+                  console.log(file);
+                });
             });
           }
           catch (error) {
