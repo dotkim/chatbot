@@ -11,6 +11,7 @@
   "dependencies": {
     "discord.js": "^11.5.1",
     "dotenv": "^7.0.0",
+    "image-thumbnail": "^1.0.3",
     "node-hue-api": "^2.4.5",
     "soundex": "^0.2.1",
     "wol": "^1.0.6"
