@@ -10,6 +10,7 @@ class Fetch {
       try {
         console.log('attachment found:', attch.id, 'url:', attch.url);
         let extension = attch.url.split('.').pop();
+        extension = extension.toLowerCase();
         let name = attch.id + '.' + extension;
         let path = process.env.FILEPATH + attch.id + '.' + extension;
         let file = fs.createWriteStream(path);
@@ -35,6 +36,7 @@ class Fetch {
       if (url) {
         console.log('url found:', url[1]);
         let extension = url[1].split('.').pop();
+        extension = extension.toLowerCase();
         let name = id + '.' + extension;
         let path = process.env.FILEPATH + id + '.' + extension;
         let imgRegex = /^(image|video)\/\w/gi;
