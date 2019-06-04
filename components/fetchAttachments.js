@@ -4,6 +4,13 @@ const http = require('http');
 const fs = require('fs');
 const thumbnail = require('./thumbnail');
 
+function publishImage(name) {
+  let url = process.env.APIURL + name;
+  http.request(url, { method: 'post' }, function(res) {
+    if (res.statusCode === 200) console.log('Image published');
+  });
+}
+
 class Fetch {
   attchFetch(attachments) {
     attachments.forEach((attch) => {
@@ -18,6 +25,7 @@ class Fetch {
           response.pipe(file);
         });
         setTimeout(function () { thumbnail(name) }, 1000);
+        publishImage(name);
       }
       catch (error) {
         console.error(error);
@@ -51,6 +59,7 @@ class Fetch {
               response.pipe(file);
             });
             setTimeout(function () { thumbnail(name) }, 1000);
+            publishImage(name);
           }
           catch (error) {
             console.error(error);
@@ -67,6 +76,7 @@ class Fetch {
               response.pipe(file);
             });
             setTimeout(function () { thumbnail(name) }, 1000);
+            publishImage(name);
           }
           catch (error) {
             console.error(error);
