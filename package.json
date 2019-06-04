@@ -1,6 +1,6 @@
 {
   "name": "chatbot",
-  "version": "3.3.8",
+  "version": "3.3.9",
   "description": "Beep boop",
   "main": "index.js",
   "scripts": {
