@@ -7,7 +7,7 @@ const thumbnail = require('./thumbnail');
 function publishImage(name) {
   let url = process.env.APIURL + name;
   let req = http.request(url, { method: 'POST' }, function(res) {
-    if (res.statusCode === 200) console.log('Image published');
+    console.log(res.statusCode);
   });
   req.end();
 }
