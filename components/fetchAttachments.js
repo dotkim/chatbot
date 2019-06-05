@@ -2,17 +2,35 @@ require('dotenv').config();
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const thumbnail = require('./thumbnail');
+
+function publishImage(name) {
+  let url = process.env.APIURL + name;
+  let req = http.request(url, { method: 'POST' }, function(res) {
+    console.log('response status:', res.statusCode);
+  });
+  req.end();
+}
 
 class Fetch {
   attchFetch(attachments) {
     attachments.forEach((attch) => {
-      console.log('attachment found:', attch.id, 'url:', attch.url);
-      let extension = attch.url.split('.').pop();
-      let path = process.env.FILEPATH + attch.id + '.' + extension;
-      let file = fs.createWriteStream(path);
-      https.get(attch.url, function (response) {
-        response.pipe(file);
-      });
+      try {
+        console.log('attachment found:', attch.id, 'url:', attch.url);
+        let extension = attch.url.split('.').pop();
+        extension = extension.toLowerCase();
+        let name = attch.id + '.' + extension;
+        let path = process.env.FILEPATH + attch.id + '.' + extension;
+        let file = fs.createWriteStream(path);
+        https.get(attch.url, function (response) {
+          response.pipe(file);
+        });
+        setTimeout(function () { thumbnail(name) }, 1000);
+        publishImage(name);
+      }
+      catch (error) {
+        console.error(error);
+      }
     });
   }
 
@@ -27,18 +45,22 @@ class Fetch {
       if (url) {
         console.log('url found:', url[1]);
         let extension = url[1].split('.').pop();
+        extension = extension.toLowerCase();
+        let name = id + '.' + extension;
         let path = process.env.FILEPATH + id + '.' + extension;
+        let imgRegex = /^(image|video)\/\w/gi;
 
         if (url[3] === 'https://') {
           try {
             https.get(url[1], function (response) {
-              let imgRegex = /^(image|video)\/\w/gi;
               let img = imgRegex.exec(response.headers['content-type']);
               if (!img) return;
 
               let file = fs.createWriteStream(path);
               response.pipe(file);
             });
+            setTimeout(function () { thumbnail(name) }, 1000);
+            publishImage(name);
           }
           catch (error) {
             console.error(error);
@@ -48,13 +70,14 @@ class Fetch {
         else if (url[3] === 'http://') {
           try {
             http.get(url[1], function (response) {
-              let imgRegex = /^(image|video)\/\w/gi;
               let img = imgRegex.exec(response.headers['content-type']);
               if (!img) return;
 
               let file = fs.createWriteStream(path);
               response.pipe(file);
             });
+            setTimeout(function () { thumbnail(name) }, 1000);
+            publishImage(name);
           }
           catch (error) {
             console.error(error);
