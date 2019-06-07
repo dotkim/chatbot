@@ -50,7 +50,7 @@ class Fetch {
       if (url) {
         console.log('url found:', url[1]);
         // check if my domain CNAME is contained in the message
-        if (url[1].contains(process.env.CNAME)) return;
+        if (url[1].includes(process.env.CNAME)) return;
         let extension = url[1].split('.').pop();  // get the extension of the file
         if (extension.length > 5) return;         // skip if the extension is longer than 5 characters.
         extension = extension.toLowerCase();
