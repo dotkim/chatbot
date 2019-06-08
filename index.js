@@ -119,6 +119,11 @@ client.on('message', async (message) => {
     if (message.content.startsWith('+add')) {
       let add = await parse.add(message.content);
 
+      if ((!add[1] || (!add[2]))) {
+        message.channel.send('missing keyword param');
+        return;
+      }
+
       data.addKeyword(add[1].toLowerCase(), add[2]);
 
       try {
