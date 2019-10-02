@@ -36,7 +36,6 @@ module.exports = class {
 
         try {
           let b64Content = await this.getContent(url[1]);
-          console.log(Object.keys(b64Content));
 
           if (!imgRegex.exec(b64Content.contentType)) return;
           insert(name, b64Content['body']);
