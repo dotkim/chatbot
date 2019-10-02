@@ -8,13 +8,14 @@ const HueController = require('./components/hue.js');
 const soundCompare = require('./components/keywordCompare.js');
 const ImgFetch = require('./components/fetchAttachments.js');
 const wol = require('./components/wakeOnLan.js');
+const Get = require('./request/get');
 
 const client = new Discord.Client();
 const data = new JsonHandler();
 const parse = new Parse();
 const hue = new HueController();
 const images = new imageHandler();
-const fetch = new ImgFetch();
+const get = new Get();
 
 client.on('ready', () => {
   client.user.setPresence({ status: 'online', game: { name: 'v3.4.3 ".help"', type: 'WATCHING' } });
@@ -36,12 +37,12 @@ client.on('message', async (message) => {
     // if there is an attachment save it to a provided Dir.
     console.log('message:', message.id, message.author.username, message.content);
     if (!message.attachments.size == 0) {
-      fetch.attchFetch(message.attachments);
+      ImgFetch(message.attachments);
     }
 
     // parse the message content to see if there is an URL in it
     // if there is an URL, check if the content-type is an image and download it
-    fetch.urlattch(message.content, message.id);
+    get.parseImageSource(message.content, message.id);
     
     if (
       (message.content.toLowerCase().includes('donut')) ||
