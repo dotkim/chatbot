@@ -17,7 +17,7 @@ const images = new imageHandler();
 const fetch = new ImgFetch();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.4.2 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.4.3 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -118,6 +118,11 @@ client.on('message', async (message) => {
     // TODO: make the add keyword take multi line. Seems like my regex can't parse multiline.
     if (message.content.startsWith('+add')) {
       let add = await parse.add(message.content);
+
+      if ((!add[1] || (!add[2]))) {
+        message.channel.send('missing keyword param');
+        return;
+      }
 
       data.addKeyword(add[1].toLowerCase(), add[2]);
 
