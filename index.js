@@ -4,20 +4,18 @@ const JsonHandler = require('./data/JsonHandler.js');
 const imageHandler = require('./data/imageHandler.js');
 const Parse = require('./components/parseMessage.js');
 const getRandomInt = require('./components/getRandomInt.js');
-const HueController = require('./components/hue.js');
 const soundCompare = require('./components/keywordCompare.js');
 const ImgFetch = require('./components/fetchAttachments.js');
-const wol = require('./components/wakeOnLan.js');
+const Get = require('./request/get');
 
 const client = new Discord.Client();
 const data = new JsonHandler();
 const parse = new Parse();
-const hue = new HueController();
 const images = new imageHandler();
-const fetch = new ImgFetch();
+const get = new Get();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.4.3 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.5.1 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
@@ -36,12 +34,12 @@ client.on('message', async (message) => {
     // if there is an attachment save it to a provided Dir.
     console.log('message:', message.id, message.author.username, message.content);
     if (!message.attachments.size == 0) {
-      fetch.attchFetch(message.attachments);
+      ImgFetch(message.attachments);
     }
 
     // parse the message content to see if there is an URL in it
     // if there is an URL, check if the content-type is an image and download it
-    fetch.urlattch(message.content, message.id);
+    get.parseImageSource(message.content, message.id);
     
     if (
       (message.content.toLowerCase().includes('donut')) ||
@@ -142,41 +140,6 @@ client.on('message', async (message) => {
       let result = await data.editKeyword(edit[1], edit[2]);
       if (result === 1) message.channel.send('editing: ' + edit[1] + ' new key: ' + edit[2]);
       else if (result === 0) message.channel.send('keywords are alike, did nothing.');
-    }
-
-    if (message.content.startsWith('.hue')) {
-      let user = await data.getUser(message.author.id);
-
-      if (user.type === 'admin') {
-        let cmd = await parse.hue(message.content);
-
-        if (cmd[1] == 'get') {
-          let reply = await hue.getState();
-          message.channel.send(reply);
-        }
-
-        if (cmd[1] == 'set') {
-          try {
-            hue.setState(cmd[2], cmd[3]);
-          }
-          catch (error) {
-            console.error(error);
-          }
-        }
-      }
-    }
-
-    if (message.content.startsWith('.wol')) {
-      let user = await data.getUser(message.author.id);
-      if ((user.type === 'admin') && (user.mac)) {
-        let res = await wol(user.mac);
-        if (res) message.channel.send('sent magic packet to IF: ' + user.mac);
-      }
-      else {
-        // user is not admin or doesnt have mac
-        if ((user.type !== 'admin') || (!user.type)) message.channel.send('not admin lel noob');
-        if (!user.mac) message.channel.send('*He doesn\'t have a mac* :joy:');
-      }
     }
 
     if (message.content.startsWith('.help')) {
