@@ -7,6 +7,7 @@ const getRandomInt = require('./components/getRandomInt.js');
 const soundCompare = require('./components/keywordCompare.js');
 const ImgFetch = require('./components/fetchAttachments.js');
 const Get = require('./request/get');
+const getRandomImage = require('./request/getRandom');
 
 const client = new Discord.Client();
 const data = new JsonHandler();
@@ -87,6 +88,12 @@ client.on('message', async (message) => {
           name: obj.name
         }]
       });
+    }
+
+    if (message.content.toLowerCase().includes('random')) {
+      let data = await getRandomImage();
+      console.log('sending random image:', data);
+      message.channel.send(data);
     }
 
     // this is where the keywords with ! at the begining is handled.
