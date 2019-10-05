@@ -16,7 +16,7 @@ const images = new imageHandler();
 const get = new Get();
 
 client.on('ready', () => {
-  client.user.setPresence({ status: 'online', game: { name: 'v3.5.1 ".help"', type: 'WATCHING' } });
+  client.user.setPresence({ status: 'online', game: { name: 'v3.5.2 ".help"', type: 'WATCHING' } });
   console.log('bot ready');
   console.log('---------------------');
 });
