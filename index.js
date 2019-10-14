@@ -41,7 +41,7 @@ client.on('message', async (message) => {
     // parse the message content to see if there is an URL in it
     // if there is an URL, check if the content-type is an image and download it
     get.parseImageSource(message.content, message.id);
-    
+
     if (
       (message.content.toLowerCase().includes('donut')) ||
       (message.content.toLowerCase().includes('burger')) ||
@@ -73,13 +73,13 @@ client.on('message', async (message) => {
         }]
       });
     }
-    
+
     if (
       (message.content.toLowerCase().includes('brainlet')) ||
       (message.content.toLowerCase().includes('retard')) ||
       (message.content.toLowerCase().includes('dust')) ||
       (message.content.toLowerCase().includes('stupid'))
-      ) {
+    ) {
       let obj = await images.brainlets();
       console.log(obj);
       message.channel.send({
