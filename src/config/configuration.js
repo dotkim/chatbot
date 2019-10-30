@@ -1,9 +1,16 @@
+'use strict'
 require('dotenv').config();
 
+/**
+ * returns a config object
+ * @constructor
+ * reads the .env file for the config
+ * if nothing is found for that key it sets the default
+ */
 function Config() {
   this.config = {};
   // Discord bot token
-  this.config.token         = process.env.TOKEN         || undefined;
+  this.config.token = process.env.TOKEN || undefined;
 
   // if a domain name should be excluded from the image sniffer
   this.config.ignoredDomain = process.env.IGNOREDDOMAIN || undefined;
@@ -12,9 +19,9 @@ function Config() {
   // If an URL is provided, the bot will send images to that API
   // The API description is not done yet, check https://github.com/dotkim/images-api
   // the auth is set on the API, currently only Basic auth
-  this.config.apiUrl        = process.env.APIURL        || undefined;
-  this.config.apiPort       = process.env.APIPORT       || 80;
-  this.config.apiAuth       = process.env.APIAUTH       || 'admin:secret';
+  this.config.apiUrl  = process.env.APIURL  || undefined;
+  this.config.apiPort = process.env.APIPORT || 80;
+  this.config.apiAuth = process.env.APIAUTH || 'admin:secret';
 }
 
 Config.call(this);
