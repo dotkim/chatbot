@@ -10,7 +10,7 @@ module.exports = class {
    * request constructor
    * @constructor
    * @param {Object} parameters - object with parameters and names
-   * @param {String} method - request method
+   * @param {String} [method='GET'] - request method
    * 
    * returns an instance of Url for GET or an option object for POST
    */

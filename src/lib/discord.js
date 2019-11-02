@@ -41,8 +41,8 @@ module.exports = class {
   /**
    * set the presence status for the bot
    * @param {String} name - The name of the "game"
-   * @param {String} status='online' - The discord status for the bot
-   * @param {String} type='PLAYING' - What type of message
+   * @param {String} [status='online'] - The discord status for the bot
+   * @param {String} [type='PLAYING'] - What type of message
    * 
    * returns true if it sets
    */
@@ -74,13 +74,13 @@ module.exports = class {
 
   /**
    * reply to a message
-   * @param {Boolean} tts=false - Switch for saying something in tts
    * @param {Object} message - Message object from listener
    * @param {String} content - The text content of the reply
+   * @param {Boolean} [tts=false] - Switch for saying something in tts
    * 
    * returns a promise with the new message object
    */
-  reply(tts=false, message, content) {
+  reply(message, content, tts=false) {
     return message.reply(content, { tts: tts });
   }
 
