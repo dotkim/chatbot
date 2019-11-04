@@ -1,12 +1,18 @@
 'use strict'
-const Request = require('./request');
-const route = 'keywords'
+const Request = require('../api/request');
 
 /**
  * Class for getting and adding keywords
  * @class
  */
-class Keywords {
+class Keyword {
+  /**
+   * @constructor
+   */
+  constructor() {
+    this.route = 'keyword'
+  }
+
   /**
    * Get a specific keyword from the API
    * @param {String} keyword - The keyword to get from the API
@@ -14,7 +20,7 @@ class Keywords {
    * Returns a promise with the keyword object
    */
   get(keyword) {
-    let req = new Request(route, keyword);
+    let req = new Request(this.route, keyword);
     return req.get()
   }
 
@@ -26,9 +32,9 @@ class Keywords {
    * Returns a promise with the new keyword object
    */
   add(keyword, message) {
-    let req = new Request(route, keyword, {message});
+    let req = new Request(this.route, keyword, { message });
     return req.post();
   }
 }
 
-module.exports = Keywords;
+module.exports = Keyword;
