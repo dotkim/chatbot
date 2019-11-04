@@ -8,8 +8,9 @@ const requestBody = require('./requestBody');
  * @class
  */
 class Request {
-  constructor(route, param, body = {}) {
-    if (body.length > 0) {
+  //eslint-disable-next-line no-undefined
+  constructor(route, param, body = undefined) {
+    if (body) {
       this.body = requestBody(body);
       this.factory = new RequestFactory(route, param, 'POST');
       this.options = this.factory.post(body.length);

@@ -1,3 +1,4 @@
+/*eslint-disable no-undefined*/
 'use strict'
 require('dotenv').config();
 
@@ -12,10 +13,13 @@ require('dotenv').config();
 class Config {
   constructor() {
     this.config = {};
+
     //Discord bot token
     this.config.token = process.env.TOKEN || undefined;
+    
     //if a domain name should be excluded from the image sniffer
     this.config.ignoredDomain = process.env.IGNOREDDOMAIN || undefined;
+
     //API info
     /*
      *If an URL is provided, the bot will send images to that API
