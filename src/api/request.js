@@ -11,7 +11,7 @@ class Request {
   //eslint-disable-next-line no-undefined
   constructor(route, param, body = undefined) {
     if (body) {
-      this.body = requestBody(body);
+      this.body = new requestBody(body).json();
       this.factory = new RequestFactory(route, param, 'POST');
       this.options = this.factory.post(body.length);
     } else {
