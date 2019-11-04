@@ -22,7 +22,7 @@ class Request {
 
   /**
    * Send a GET request to the received URL
-   * Returns a promise with data
+   * @returns {Promise} Promise represents received API data
    */
   get() {
     return new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ class Request {
 
   /**
    * Send a POST request to the received URL
-   * Returns a promise with data
+   * @returns {Promise} Promise represents received API data
    */
   post() {
     return new Promise((resolve, reject) => {

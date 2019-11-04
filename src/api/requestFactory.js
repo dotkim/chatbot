@@ -2,18 +2,16 @@
 const config = require('../config/configuration');
 
 /**
- * module for creating a new request
+ * Factory for a new request
  * @class
  */
 class RequestFactory {
   /**
-   * request constructor
+   * Request constructor
    * @constructor
-   * @param {String} route - the route for the api request
-   * @param {Object} parameters - object with parameters and names
-   * @param {String} [method='GET'] - request method
-   * 
-   * returns an instance of a request options
+   * @param {String} route - The route for the api request
+   * @param {Object} parameters - Object with parameters and names
+   * @param {String} [method='GET'] - Request method
    */
   constructor(route, parameters, method = 'GET') {
     this.route = route;
@@ -22,9 +20,8 @@ class RequestFactory {
   }
 
   /**
-   * build a new URL for the request
-   * 
-   * returns an instance of URL
+   * Build a new URL for the request
+   * @returns {Object} Object represents a new URL
    */
   get() {
     let query = '';
@@ -45,10 +42,9 @@ class RequestFactory {
   }
 
   /**
-   * build a option object for a post request
-   * @param {Number} bodyLength - the lenght of the body object sent to the api
-   * 
-   * returns a 'options' object for the request
+   * Build a option object for a post request
+   * @param {Number} bodyLength - The lenght of the body object sent to the api
+   * @returns {Object} Object represents options for use in a request
    */
   post(bodyLength) {
     if (!bodyLength) return new Error('bodyLength parameter is missing');

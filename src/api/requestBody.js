@@ -15,7 +15,8 @@ class RequestBody {
   }
 
   /**
-   * Creates the JSON string and returns it
+   * Creates the JSON string
+   * @returns {String} String object represents a stringified JSON object.
    */
   json() {
     return JSON.stringify(this.body);
