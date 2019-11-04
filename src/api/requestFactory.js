@@ -34,7 +34,14 @@ class RequestFactory {
     });
 
     const url = `${config.apiUrl}/${this.route}${query}`
-    return new URL(url);
+
+    const urlObj = new URL(url);
+    
+    url.startsWith('https')
+      ? urlObj.protocol = 'https'
+      : urlObj.protocol = 'http';
+
+    return urlObj;
   }
 
   /**
