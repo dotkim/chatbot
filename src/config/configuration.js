@@ -8,15 +8,15 @@ require('dotenv').config();
  * reads the .env file for the config
  * it sets the default value if nothing is found for that key
  * @class
- * @exports Config
+ * @exports Configuration
  */
-class Config {
+class Configuration {
   constructor() {
     this.config = {};
 
     //Discord bot token
     this.config.token = process.env.TOKEN || undefined;
-    
+
     //if a domain name should be excluded from the image sniffer
     this.config.ignoredDomain = process.env.IGNOREDDOMAIN || undefined;
 
@@ -32,4 +32,4 @@ class Config {
   }
 }
 
-module.exports = new Config().config;
+module.exports = new Configuration().config;
