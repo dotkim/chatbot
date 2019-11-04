@@ -9,7 +9,7 @@ class Keywords {
   }
 
   add(keyword, message) {
-    let req = new Request(route, keyword, message);
+    let req = new Request(route, keyword, {message});
     return req.post();
   }
 }
