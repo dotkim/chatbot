@@ -15,7 +15,7 @@ class RequestFactory {
    * 
    * returns an instance of a request options
    */
-  constructor(route, parameters, method='GET') {
+  constructor(route, parameters, method = 'GET') {
     this.route = route;
     this.parameters = parameters;
     this.method = method;
@@ -46,7 +46,7 @@ class RequestFactory {
   post(bodyLength) {
     if (!bodyLength) return new Error('bodyLength parameter is missing');
     if (typeof bodyLength != 'number') return new Error('bodyLength parameter must be a Number');
-    
+
     const querystring = require('querystring');
 
     const query = querystring.stringify(this.parameters);
@@ -56,14 +56,14 @@ class RequestFactory {
     let options = {};
 
     //build options object
-    options.host   = url.host;
+    options.host = url.host;
     options.method = this.method;
-    options.path   = url.pathname;
+    options.path = url.pathname;
 
     //options.protocol
     url.startsWith('https')
-    ? options.protocol = 'https'
-    : options.protocol = 'http';
+      ? options.protocol = 'https'
+      : options.protocol = 'http';
 
     //options.port
     if (url.port != '') options.port = url.port;
