@@ -45,7 +45,7 @@ class RequestFactory {
    */
   post(bodyLength) {
     if (!bodyLength) return new Error('bodyLength parameter is missing');
-    if (typeof bodyLength != 'Number') return new Error('bodyLength parameter must be a Number');
+    if (typeof bodyLength != 'number') return new Error('bodyLength parameter must be a Number');
     
     const querystring = require('querystring');
 
