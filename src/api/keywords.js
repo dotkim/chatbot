@@ -2,12 +2,10 @@
 const config = require('../config/configuration');
 
 /**
- * keywords module
- * @module api/keywords
- * 
- * used to get and add new keywords
+ * Class for getting and adding keywords
+ * @class
  */
-module.exports = class {
+class Keywords {
   /**
    * get a list of messages related to the keyword provided
    * @param {String} keyword - the keyword to fetch
@@ -68,3 +66,5 @@ module.exports = class {
     });
   }
 }
+
+module.exports = Keywords;

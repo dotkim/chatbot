@@ -3,9 +3,11 @@ require('dotenv').config();
 
 /**
  * returns a config object
- * @constructor
+ * 
  * reads the .env file for the config
- * if nothing is found for that key it sets the default
+ * it sets the default value if nothing is found for that key
+ * @function
+ * @exports Config
  */
 function Config() {
   this.config = {};

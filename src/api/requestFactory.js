@@ -3,9 +3,9 @@ const config = require('../config/configuration');
 
 /**
  * module for creating a new request
- * @module requestFactory
+ * @class
  */
-module.exports = class {
+class RequestFactory {
   /**
    * request constructor
    * @constructor
@@ -76,3 +76,5 @@ module.exports = class {
     }
   }
 }
+
+module.exports = RequestFactory;

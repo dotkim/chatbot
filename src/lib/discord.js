@@ -4,13 +4,12 @@ const config = require('../config/configuration');
 
 /**
  * discord module
- * @module lib/discord
  * @class
  * helper module for the used discord.js functionality
  * 
  * only includes what the bot needs
  */
-module.exports = class {
+class DiscordHelper {
   /**
    * creates a new instance of the discord client
    * and sets it to this.client
@@ -23,6 +22,7 @@ module.exports = class {
 
   /**
    * creates the bot session
+   * 
    * uses the token from config
    * if token is undefined (default) the app quits
    * 
@@ -153,3 +153,5 @@ module.exports = class {
     return false;
   }
 }
+
+module.exports = DiscordHelper;
