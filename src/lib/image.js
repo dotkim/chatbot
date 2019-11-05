@@ -20,7 +20,7 @@ class Image {
    * @returns {Promise<Object>} Promise object represents a new or updated image object
    */
   insert(param, image) {
-    let req = new Request(this.route, param, { image });
+    let req = new Request('insert', param, { image });
     return req.post();
   }
 
