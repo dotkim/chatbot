@@ -26,7 +26,7 @@ class RequestFactory {
   get() {
     let query = '';
 
-    Object.keys(this.parameters).forEach((key) => {
+    this.parameters.forEach((key) => {
       query += '/' + this.parameters[key];
     });
 
