@@ -1,11 +1,12 @@
 'use strict'
 const Request = require('../api/request');
+const imageSchema = require('../models/imageSchema');
 
 /**
- * Class for getting and inserting images
+ * Class for building image objects
  * @class
  */
-class Image {
+class ImageFactory {
   /**
    * @constructor
    * @param {String} [route='images'] - API route
@@ -28,12 +29,21 @@ class Image {
   /**
    * Get a random or a specific image from the API
    * @param {String|Array<String>} param - Path parameters
-   * @returns {Promise<Object>} Promise object represents an image object
+   * @returns {Promise<Image>} Promise object represents an image object
    */
-  get(param='getRandom') {
+  async get(param='getRandom') {
     let req = new Request(this.route, param);
-    return req.send();
+    let keys = Object.keys(imageSchema);
+    let data = await req.send();
+
+    let returnObject = {};
+    
+    keys.forEach((key) => {
+      returnObject[key] = data[key];
+    });
+
+    return returnObject;
   }
 }
 
-module.exports = Image;
+module.exports = ImageFactory;
