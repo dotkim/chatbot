@@ -8,9 +8,10 @@ const Request = require('../api/request');
 class Image {
   /**
    * @constructor
+   * @param {String} [route='images'] - API route
    */
-  constructor() {
-    this.route = 'images';
+  constructor(route = 'images') {
+    this.route = route;
   }
 
   /**
