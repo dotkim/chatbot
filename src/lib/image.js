@@ -22,7 +22,7 @@ class Image {
    */
   insert(param, image) {
     let req = new Request('insert', param, { image });
-    return req.post();
+    return req.send();
   }
 
   /**
@@ -32,7 +32,7 @@ class Image {
    */
   get(param='getRandom') {
     let req = new Request(this.route, param);
-    return req.get();
+    return req.send();
   }
 }
 

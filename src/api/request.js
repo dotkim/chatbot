@@ -26,38 +26,15 @@ class Request {
       this.options = this.factory.post(body.length);
     } else {
       this.factory = new RequestFactory(route, this.parameters);
-      this.url = this.factory.get();
+      this.options = this.factory.get();
     }
   }
 
   /**
-   * Send a GET request to the received URL
+   * Send the request to the API.
    * @returns {Promise<Object>} Promise represents received API data
    */
-  get() {
-    return new Promise((resolve, reject) => {
-      const lib = this.url.protocol == 'https'
-        ? require('https')
-        : require('http');
-
-      const request = lib.get(this.url, (response) => {
-        if (response.statusCode < 200 || response.statusCode > 299) {
-          reject(new Error('Failed to load page, status code: ' + response.statusCode));
-        }
-        const body = [];
-        response.on('data', (chunk) => body.push(chunk));
-        response.on('end', () => resolve(JSON.parse(body.join(''))));
-      });
-
-      request.on('error', (err) => reject(err))
-    });
-  }
-
-  /**
-   * Send a POST request to the received URL
-   * @returns {Promise<Object>} Promise represents received API data
-   */
-  post() {
+  send() {
     return new Promise((resolve, reject) => {
       const lib = this.options.protocol == 'https'
         ? require('https')
@@ -77,8 +54,10 @@ class Request {
 
       request.on('error', (err) => reject(err))
 
-      request.write(this.body);
-      request.end();
+      if (this.data) {
+        request.write(this.body);
+        request.end();
+      }
     });
   }
 }
