@@ -54,10 +54,11 @@ class Request {
 
       request.on('error', (err) => reject(err))
 
-      if (this.data) {
+      if (this.body) {
         request.write(this.body);
-        request.end();
       }
+
+      request.end();
     });
   }
 }
