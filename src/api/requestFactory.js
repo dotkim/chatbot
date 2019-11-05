@@ -27,13 +27,16 @@ class RequestFactory {
     let query = '';
 
     this.parameters.forEach((key) => {
-      query += '/' + this.parameters[key];
+      query += '/' + key;
     });
 
-    const url = `${config.apiUrl}/${this.route}${query}`
+    if (!config.apiUrl) {
+      throw new Error('config.apiUrl is undefined, there is nowhere to send this request');
+    }
 
+    const url = `${config.apiUrl}/${this.route}${query}`
     const urlObj = new URL(url);
-    
+
     url.startsWith('https')
       ? urlObj.protocol = 'https'
       : urlObj.protocol = 'http';

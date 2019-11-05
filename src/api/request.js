@@ -17,7 +17,7 @@ class Request {
    */
   //eslint-disable-next-line no-undefined
   constructor(route, parameters, body = undefined) {
-    if (typeof param == 'string') this.parameters = [parameters];
+    if (typeof parameters == 'string') this.parameters = [parameters];
     else this.parameters = parameters;
 
     if (body) {
