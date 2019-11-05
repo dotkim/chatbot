@@ -10,7 +10,7 @@ class RequestFactory {
    * Request constructor
    * @constructor
    * @param {String} route - The route for the api request
-   * @param {Object} parameters - Object with parameters and names
+   * @param {String|Array<String>} parameters - Array with parameters and names in the correct order
    * @param {String} [method='GET'] - Request method
    */
   constructor(route, parameters, method = 'GET') {

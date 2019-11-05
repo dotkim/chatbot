@@ -13,11 +13,22 @@ class Image {
     this.route = 'images';
   }
 
+  /**
+   * Insert an image to the API
+   * @param {String|Array<String>} param - Path parameters
+   * @param {Object} image - image object with name and data
+   * @returns {Promise<Object>} Promise object represents a new or updated image object
+   */
   insert(param, image) {
     let req = new Request(this.route, param, { image });
     return req.post();
   }
 
+  /**
+   * Get a random or a specific image from the API
+   * @param {String|Array<String>} param - Path parameters
+   * @returns {Promise<Object>} Promise object represents an image object
+   */
   get(param='getRandom') {
     let req = new Request(this.route, param);
     return req.get();

@@ -8,8 +8,14 @@ const requestBody = require('./requestBody');
  * @class
  */
 class Request {
+  /**
+   * Create a new instance of Request, 
+   * @param {String} route - API route
+   * @param {String|Array<String>} parameters - Path parameters
+   * @param {Object} [body=undefined] - Optional body object to post
+   * @constructor
+   */
   //eslint-disable-next-line no-undefined
-  constructor(route, param, body = undefined) {
     if (body) {
       this.body = new requestBody(body).json();
       this.factory = new RequestFactory(route, param, 'POST');
@@ -22,7 +28,7 @@ class Request {
 
   /**
    * Send a GET request to the received URL
-   * @returns {Promise} Promise represents received API data
+   * @returns {Promise<Object>} Promise represents received API data
    */
   get() {
     return new Promise((resolve, reject) => {
@@ -45,7 +51,7 @@ class Request {
 
   /**
    * Send a POST request to the received URL
-   * @returns {Promise} Promise represents received API data
+   * @returns {Promise<Object>} Promise represents received API data
    */
   post() {
     return new Promise((resolve, reject) => {
