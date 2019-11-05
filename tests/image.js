@@ -1,7 +1,7 @@
 /*eslint-disable no-console*/
 'use strict'
 
-const Image = require('../src/lib/image');
+const Image = require('../src/lib/imageFactory');
 const image = new Image();
 
 const test = async function test() {
