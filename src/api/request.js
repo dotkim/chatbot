@@ -16,12 +16,16 @@ class Request {
    * @constructor
    */
   //eslint-disable-next-line no-undefined
+  constructor(route, parameters, body = undefined) {
+    if (typeof param == 'string') this.parameters = [parameters];
+    else this.parameters = parameters;
+
     if (body) {
       this.body = new requestBody(body).json();
-      this.factory = new RequestFactory(route, param, 'POST');
+      this.factory = new RequestFactory(route, this.parameters, 'POST');
       this.options = this.factory.post(body.length);
     } else {
-      this.factory = new RequestFactory(route, param);
+      this.factory = new RequestFactory(route, this.parameters);
       this.url = this.factory.get();
     }
   }
@@ -32,7 +36,7 @@ class Request {
    */
   get() {
     return new Promise((resolve, reject) => {
-      const lib = this.options.protocol == 'https'
+      const lib = this.url.protocol == 'https'
         ? require('https')
         : require('http');
 
