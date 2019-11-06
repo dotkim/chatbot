@@ -24,24 +24,46 @@ class RequestFactory {
    * @returns {Object} Object represents a new URL
    */
   get() {
-    let query = '';
-
-    this.parameters.forEach((key) => {
-      query += '/' + key;
-    });
-
     if (!config.apiUrl) {
       throw new Error('config.apiUrl is undefined, there is nowhere to send this request');
     }
 
+    if (!this.parameters) {
+      throw new Error('Missing keyword in the request');
+    }
+
+    if (this.method != 'GET' && this.method != 'AUTHGET') {
+      throw new Error('You cannot GET a non-get request, check method and try again');
+    }
+
+    let query = '';
+    this.parameters.forEach((key) => {
+      query += '/' + key;
+    });
+
     const url = `${config.apiUrl}/${this.route}${query}`
+    const auth = new Buffer.from(config.apiAuth).toString('base64');
     const urlObj = new URL(url);
 
-    url.startsWith('https')
-      ? urlObj.protocol = 'https'
-      : urlObj.protocol = 'http';
+    let options = {};
 
-    return urlObj;
+    //build options object
+    options.host = urlObj.host;
+    options.method = this.method;
+    options.path = urlObj.pathname;
+
+    //options.port
+    if (urlObj.port != '') options.port = config.apiPort;
+
+    //options.headers
+    options.headers = {
+      'Authorization': 'Basic ' + auth
+    };
+
+    return {
+      options,
+      urlObj
+    };
   }
 
   /**
@@ -53,33 +75,36 @@ class RequestFactory {
     if (!bodyLength) return new Error('bodyLength parameter is missing');
     if (typeof bodyLength != 'number') return new Error('bodyLength parameter must be a Number');
 
-    const querystring = require('querystring');
+    let query = '';
+    this.parameters.forEach((key) => {
+      query += '/' + key;
+    });
 
-    const query = querystring.stringify(this.parameters);
-    const url = `${config.apiUrl}/${this.route}?${query}`
+    const url = `${config.apiUrl}/${this.route}${query}`
     const auth = new Buffer.from(config.apiAuth).toString('base64');
+    const urlObj = new URL(url);
 
     let options = {};
 
     //build options object
-    options.host = url.host;
+    options.host = urlObj.host;
     options.method = this.method;
-    options.path = url.pathname;
-
-    //options.protocol
-    url.startsWith('https')
-      ? options.protocol = 'https'
-      : options.protocol = 'http';
+    options.path = urlObj.pathname;
 
     //options.port
-    if (url.port != '') options.port = url.port;
+    if (urlObj.port != '') options.port = config.apiPort;
 
     //options.headers
     options.headers = {
       'Content-Type': 'application/json',
       'Content-Length': bodyLength,
       'Authorization': 'Basic ' + auth
-    }
+    };
+
+    return {
+      options,
+      urlObj
+    };
   }
 }
 
