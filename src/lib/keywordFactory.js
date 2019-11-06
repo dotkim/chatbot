@@ -2,10 +2,10 @@
 const Request = require('../api/request');
 
 /**
- * Class for getting and adding keywords
+ * Class for building keyword objects
  * @class
  */
-class Keyword {
+class KeywordFactory {
   /**
    * @constructor
    */
@@ -35,4 +35,4 @@ class Keyword {
   }
 }
 
-module.exports = Keyword;
+module.exports = KeywordFactory;
