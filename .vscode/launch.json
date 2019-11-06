@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Test Image",
-      "program": "${workspaceFolder}\\tests\\image.js",
+      "program": "${workspaceFolder}\\test\\keyword.js",
       "smartStep": true,
       "skipFiles": [
         "${workspaceFolder}/node_modules/**/*.js",
