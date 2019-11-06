@@ -16,16 +16,18 @@ class Request {
    * @constructor
    */
   //eslint-disable-next-line no-undefined
-  constructor(route, parameters, body = undefined) {
-    if (typeof parameters == 'string') this.parameters = [parameters];
-    else this.parameters = parameters;
+  constructor(route, options) {
+    if (typeof options.parameters == 'string') this.parameters = [options.parameters];
+    else this.parameters = options.parameters;
 
-    if (body) {
-      this.body = new requestBody(body).json();
-      this.factory = new RequestFactory(route, this.parameters, 'POST');
-      this.options = this.factory.post(body.length);
+    if (options.body) {
+      this.method = options.method;
+      this.body = new requestBody(options.body).json();
+      this.factory = new RequestFactory(route, this.parameters, options.method);
+      this.options = this.factory.post(this.body.length);
     } else {
-      this.factory = new RequestFactory(route, this.parameters);
+      this.method = options.method;
+      this.factory = new RequestFactory(route, this.parameters, options.method);
       this.options = this.factory.get();
     }
   }
