@@ -1,7 +1,7 @@
 'use strict'
 
 const RequestFactory = require('./requestFactory');
-const requestBody = require('./requestBody');
+const RequestBody = require('./requestBody');
 
 /**
  * Request module for getting and posting
@@ -22,7 +22,7 @@ class Request {
 
     if (options.body) {
       this.method = options.method;
-      this.body = new requestBody(options.body).json();
+      this.body = new RequestBody(options.body).json();
       this.factory = new RequestFactory(route, this.parameters, options.method);
       this.options = this.factory.post(this.body.length);
     } else {
