@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Class for creating a request body
+ * Class for creating a request body.
  * @class
  */
 class RequestBody {
   /**
-   * Create a request body for the POST request
-   * @param {Object} body - The body object to stringify (must be valid JSON)
+   * Create a request body for the POST request.
+   * @param {Object} body - The body object to stringify (must be valid JSON).
    * @constructor
    */
   constructor(body) {
@@ -15,8 +15,9 @@ class RequestBody {
   }
 
   /**
-   * Creates the JSON string
+   * Creates the JSON string.
    * @returns {String} String object represents a stringified JSON object.
+   * @example const body = new RequestBody(bodyObject).json();
    */
   json() {
     return JSON.stringify(this.body);

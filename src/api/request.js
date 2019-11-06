@@ -4,16 +4,21 @@ const RequestFactory = require('./requestFactory');
 const RequestBody = require('./requestBody');
 
 /**
- * Request module for getting and posting
+ * Request module for getting and posting.
  * @class
  */
 class Request {
   /**
-   * Create a new instance of Request, 
-   * @param {String} route - API route
-   * @param {String|Array<String>} parameters - Path parameters
-   * @param {Object} [body=undefined] - Optional body object to post
+   * Create a new instance of Request.
+   * @param {String} route - The desired API route.
+   * @param {Object} options - An object containing the nessecary keys and values for the request.
+   * @param {String} options.parameters - The request parameters, this is in PATH params for the API.
+   * @param {String} [options.method] - The request method.
+   * @param {Object} [options.body] - The request body, if omited the request will not POST.
    * @constructor
+   * @example
+   * const Request = require('../api/request');
+   * let req = new Request(this.route, { parameters: 'happy', method: 'AUTHGET' });
    */
   //eslint-disable-next-line no-undefined
   constructor(route, options) {
@@ -34,7 +39,11 @@ class Request {
 
   /**
    * Send the request to the API.
-   * @returns {Promise<Object>} Promise represents received API data
+   * @returns {Promise<Object>} Promise represents received API data.
+   * @example
+   * (async function() {
+   *   let res = await req.send();
+   * })();
    */
   send() {
     return new Promise((resolve, reject) => {

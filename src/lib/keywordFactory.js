@@ -3,13 +3,13 @@ const Request = require('../api/request');
 const Keyword = require('./keyword');
 
 /**
- * Class for building keyword objects
+ * Class for building keyword objects.
  * @class
  */
 class KeywordFactory {
   /**
    * @constructor
-   * @param {String} [route='keyword'] - The API route
+   * @param {String} [route='keyword'] - The API route.
    * @example
    * const KeywordFactory = require('lib/keywordFactory');
    * const factory = new KeywordFactory();
@@ -19,10 +19,10 @@ class KeywordFactory {
   }
 
   /**
-   * Add a new or update an existing keyword
-   * @param {String|String[]} keyword - The new or existing keyword
-   * @param {String} message - The message to add
-   * @returns {Promise<Keyword>} Promise object represents a new or updated keyword object
+   * Add a new or update an existing keyword.
+   * @param {String} keyword - The new or existing keyword.
+   * @param {String} message - The message to add.
+   * @returns {Promise<Keyword>} Promise object represents a new or updated keyword object.
    * @example
    * (async function() {
    *   let result = await factory.add('angry', 'I am very angry!!'); // returns added keyword object
@@ -42,9 +42,9 @@ class KeywordFactory {
   }
 
   /**
-   * Get a specific keyword from the API
-   * @param {String} keyword - The keyword to get from the API
-   * @returns {Promise<Keyword>} Promise object represents a keyword object
+   * Get a specific keyword from the API.
+   * @param {String} keyword - The keyword to get from the API.
+   * @returns {Promise<Keyword>} Promise object represents a keyword object.
    * @example
    * (async function() {
    *   let result = await factory.get('angry');
