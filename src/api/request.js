@@ -52,7 +52,7 @@ class Request {
         response.on('end', () => resolve(JSON.parse(returnBody.join(''))));
       });
 
-      request.on('error', (err) => reject(err))
+      request.on('error', (err) => reject(new Error(err)));
 
       if (this.body) {
         request.write(this.body);
