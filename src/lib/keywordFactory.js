@@ -14,7 +14,7 @@ class KeywordFactory {
    * const KeywordFactory = require('lib/keywordFactory');
    * const factory = new KeywordFactory();
    */
-  constructor(route='keyword') {
+  constructor(route = 'keyword') {
     this.route = route;
   }
 
@@ -29,13 +29,12 @@ class KeywordFactory {
    * })();
    */
   async add(keyword, message) {
-    let options = {
-      parameters: keyword,
-      method: 'POST',
-      body: { message }
-    };
+    this.options = {};
+    this.options.parameters = keyword;
+    this.options.body = { message };
+    this.options.method = 'POST';
 
-    let req = new Request(this.route, options);
+    let req = new Request(this.route, this.options);
     let res = await req.send();
 
     return new Keyword(res);
@@ -51,12 +50,11 @@ class KeywordFactory {
    * })();
    */
   async get(keyword) {
-    let options = {
-      parameters: keyword,
-      method: 'AUTHGET'
-    };
+    this.options = {};
+    this.options.parameters = keyword;
+    this.options.method = 'AUTHGET';
 
-    let req = new Request(this.route, options);
+    let req = new Request(this.route, this.options);
     let res = await req.send();
 
     return new Keyword(res);
