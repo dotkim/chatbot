@@ -7,8 +7,19 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test Image",
-      "program": "${workspaceFolder}\\test\\keyword.js",
+      "name": "Test keyword",
+      "program": "${workspaceFolder}\\scripts\\keyword.js",
+      "smartStep": true,
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test image",
+      "program": "${workspaceFolder}\\scripts\\image.js",
       "smartStep": true,
       "skipFiles": [
         "${workspaceFolder}/node_modules/**/*.js",
