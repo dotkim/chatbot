@@ -32,7 +32,7 @@ class RequestFactory {
       throw new Error('config.apiUrl is undefined, there is nowhere to send this request');
     }
     if (!this.parameters) {
-      throw new Error('Missing keyword in the request');
+      throw new Error('Missing parameters in the request');
     }
     if (this.method != 'GET' && this.method != 'AUTHGET') {
       throw new Error('You cannot GET a non-get request, check method and try again');
@@ -48,16 +48,10 @@ class RequestFactory {
     const urlObj = new URL(url);
 
     let options = {};
-
-    //build options object
     options.host = urlObj.host;
     options.method = this.method;
     options.path = urlObj.pathname;
-
-    //options.port
-    if (urlObj.port != '') options.port = config.apiPort;
-
-    //options.headers
+    options.port = config.apiPort;
     options.headers = {
       'Authorization': 'Basic ' + auth
     };
@@ -82,7 +76,7 @@ class RequestFactory {
       throw new Error('config.apiUrl is undefined, there is nowhere to send this request');
     }
     if (!this.parameters) {
-      throw new Error('Missing keyword in the request');
+      throw new Error('Missing parameters in the request');
     }
     if (this.method != 'POST') {
       throw new Error('You cannot POST a non-post request, check method and try again');
@@ -99,15 +93,10 @@ class RequestFactory {
 
     let options = {};
 
-    //build options object
     options.host = urlObj.host;
     options.method = this.method;
     options.path = urlObj.pathname;
-
-    //options.port
-    if (urlObj.port != '') options.port = config.apiPort;
-
-    //options.headers
+    options.port = config.apiPort;
     options.headers = {
       'Content-Type': 'application/json',
       'Content-Length': bodyLength,
