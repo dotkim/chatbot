@@ -9,7 +9,7 @@
  */
 const schema = {
   keyword: String,
-  messages: Array
+  values: Array
 };
 
 module.exports = schema;
