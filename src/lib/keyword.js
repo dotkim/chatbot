@@ -16,8 +16,9 @@ class Keyword {
    */
   constructor(responseObject) {
     this.schema = keywordSchema;
-    this.schema.keyword = responseObject.keyword;
-    this.schema.values = responseObject.values;
+    Object.keys(this.schema).forEach((key) => {
+      this.schema[key] = responseObject[key];
+    });
   }
 }
 
