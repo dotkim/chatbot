@@ -14,7 +14,6 @@ class DiscordHelper {
    */
   constructor() {
     this.client = new Discord.Client();
-    return this.client;
   }
 
   /**
@@ -135,6 +134,28 @@ class DiscordHelper {
 
     if (content.startsWith(string)) return true;
     return false;
+  }
+
+  /**
+   * Creates an eventlistener for the ready event.
+   * @param {Function} callback - A callback function which runs when the event is emitted.
+   * @returns {Function} - The eventlistener for that event.
+   */
+  ready(callback) {
+    return this.client.on('ready', () => {
+      callback();
+    });
+  }
+
+  /**
+   * Creates an eventlistener for the message event.
+   * @param {Function} callback - A callback function which runs when the event is emitted.
+   * @returns {Function} - The eventlistener for that event.
+   */
+  message(callback) {
+    return this.client.on('message', (message) => {
+      callback(message);
+    });
   }
 }
 
