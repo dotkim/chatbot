@@ -3,7 +3,10 @@
     "plugins/markdown"
   ],
   "source": {
-    "include": ["src"]
+    "include": [
+      "src/api",
+      "src/models"
+    ]
   },
   "opts": {
     "template": "node_modules/tui-jsdoc-template"
