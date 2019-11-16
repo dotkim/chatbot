@@ -16,14 +16,13 @@ class CommandFactory {
    */
   parse(content) {
     const parse = CommandParser(content);
-    const command = {
+
+    const data = {
       name: parse.groups.name,
       prefix: parse.groups.prefix
     };
 
-    if (!command) throw new Error('Command was not parsed correctly');
-
-    return new Command(command).schema;
+    return new Command(data).schema;
   }
 }
 

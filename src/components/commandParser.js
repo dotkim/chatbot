@@ -7,6 +7,7 @@
  */
 const CommandParser = function CommandParser(message) {
   const regex = /^(?<prefix>.)(?<name>\w+)$/giu;
+  if (!regex.test(message)) throw new Error('Command could not be parsed correctly');
   return regex.exec(message);
 }
 
