@@ -49,7 +49,7 @@ class RequestFactory {
 
     let options = {};
     options.host = urlObj.host;
-    options.method = this.method;
+    options.method = 'GET';
     options.path = urlObj.pathname;
     options.port = config.apiPort;
     options.headers = {
@@ -94,7 +94,7 @@ class RequestFactory {
     let options = {};
 
     options.host = urlObj.host;
-    options.method = this.method;
+    options.method = 'POST';
     options.path = urlObj.pathname;
     options.port = config.apiPort;
     options.headers = {

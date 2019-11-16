@@ -1,6 +1,6 @@
 'use strict'
-const Request = require('../api/request');
-const Image = require('./image');
+const Request = require('../models/request');
+const Image = require('../models/image');
 
 /**
  * Class for building image objects.
@@ -11,7 +11,7 @@ class ImageFactory {
    * @constructor
    * @param {String} [route='images'] - API route.
    * @example
-   * const ImageFactory = require('lib/imageFactory');
+   * const ImageFactory = require('./imageFactory');
    * const factory = new ImageFactory();
    */
   constructor(route = 'images') {

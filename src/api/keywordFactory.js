@@ -1,6 +1,6 @@
 'use strict'
-const Request = require('../api/request');
-const Keyword = require('./keyword');
+const Request = require('../models/request');
+const Keyword = require('../models/keyword');
 
 /**
  * Class for building keyword objects.
@@ -11,7 +11,7 @@ class KeywordFactory {
    * @constructor
    * @param {String} [route='keyword'] - The API route.
    * @example
-   * const KeywordFactory = require('lib/keywordFactory');
+   * const KeywordFactory = require('./keywordFactory');
    * const factory = new KeywordFactory();
    */
   constructor(route = 'keyword') {

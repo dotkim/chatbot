@@ -1,7 +1,7 @@
 'use strict'
 
-const RequestFactory = require('./requestFactory');
-const RequestBody = require('./requestBody');
+const RequestFactory = require('../api/requestFactory');
+const RequestBody = require('../components/requestBody');
 
 /**
  * Request module for getting and posting.

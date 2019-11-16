@@ -1,6 +1,6 @@
 'use strict'
-const Command = require('./command');
-const CommandParser = require('./commandParser');
+const Command = require('../models/command');
+const CommandParser = require('../components/commandParser');
 
 /**
  * Class for building command objects, objects are used for passing a command into another class
@@ -10,6 +10,9 @@ class CommandFactory {
    * Parse the message for a command.
    * @param {String} content - Content from the discord message, usually message.content
    * @returns {Command} represents a new instance of a command, this has a schema property with the command schema.
+   * @example
+   * const CommandFactory = require('./commandFactory');
+   * const factory = new CommandFactory();
    */
   parse(content) {
     const parse = CommandParser(content);
