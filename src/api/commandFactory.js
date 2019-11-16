@@ -23,7 +23,7 @@ class CommandFactory {
 
     if (!command) throw new Error('Command was not parsed correctly');
 
-    return new Command(command);
+    return new Command(command).schema;
   }
 }
 

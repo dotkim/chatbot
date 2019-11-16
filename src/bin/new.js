@@ -25,7 +25,7 @@ bot.message(async (message) => {
 
   const command = cmdfactory.parse(message.content);
   //eslint-disable-next-line no-unused-vars
-  const aaaa = PrefixChecker(command.schema.prefix);
+  const aaaa = PrefixChecker(command.prefix);
 
   const availCmds = [
     'keyword',
@@ -38,7 +38,7 @@ bot.message(async (message) => {
   let keyword = {};
 
   try {
-    keyword = await factory.get(command.schema.name);
+    keyword = await factory.get(command.name);
   } catch (err) {
     //eslint-disable-next-line no-console
     console.error(err);
