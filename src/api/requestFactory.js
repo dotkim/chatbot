@@ -1,5 +1,5 @@
 'use strict'
-const config = require('../config/configuration');
+const config = require('../config/Configuration');
 
 /**
  * Factory for a new request.

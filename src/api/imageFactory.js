@@ -1,6 +1,6 @@
 'use strict'
-const Request = require('../models/request');
-const Image = require('../models/image');
+const Request = require('../models/Request');
+const Image = require('../models/Image');
 
 /**
  * Class for building image objects.

@@ -1,6 +1,6 @@
 'use strict'
-const Command = require('../models/command');
-const CommandParser = require('../components/commandParser');
+const Command = require('../models/Command');
+const CommandParser = require('../components/CommandParser');
 
 /**
  * Class for building command objects, objects are used for passing a command into another class

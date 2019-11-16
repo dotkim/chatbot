@@ -1,6 +1,6 @@
 'use strict'
 const Discord = require('discord.js');
-const config = require('../config/configuration');
+const config = require('../config/Configuration');
 
 /**
  * Discord module

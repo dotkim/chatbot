@@ -1,7 +1,7 @@
 'use strict'
 //THIS FILE WILL CHANGE NAME TO INDEX.JS WHEN THE OTHER FILE HAS BEEN REMOVED
 
-const CommandFactory = require('../api/commandFactory');
+const CommandFactory = require('../api/CommandFactory');
 const PrefixChecker = require('../config/prefixes');
 let Factory = '';
 
