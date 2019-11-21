@@ -1,5 +1,5 @@
 'use strict'
-const imageSchema = require('../models/imageSchema');
+const imageSchema = require('./imageSchema');
 
 /**
  * Creates an Image

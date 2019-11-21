@@ -1,5 +1,5 @@
 'use strict'
-const commandSchema = require('../models/commandSchema');
+const commandSchema = require('./commandSchema');
 
 class Command {
   /**

@@ -1,5 +1,5 @@
 'use strict'
-const keywordSchema = require('../models/keywordSchema');
+const keywordSchema = require('./keywordSchema');
 
 /**
  * Creates a Keyword
