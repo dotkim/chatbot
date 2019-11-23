@@ -69,18 +69,11 @@ class RequestFactory {
    * @example const options = factory.post(this.body.length);
    */
   post(bodyLength) {
-    if (!bodyLength) return new Error('bodyLength parameter is missing');
-    if (typeof bodyLength != 'number') return new Error('bodyLength parameter must be a Number');
-
-    if (!config.apiUrl) {
-      throw new Error('config.apiUrl is undefined, there is nowhere to send this request');
-    }
-    if (!this.parameters) {
-      throw new Error('Missing parameters in the request');
-    }
-    if (this.method != 'POST') {
-      throw new Error('You cannot POST a non-post request, check method and try again');
-    }
+    if (!bodyLength)                   throw new Error('bodyLength parameter is missing');
+    if (typeof bodyLength != 'number') throw new Error('bodyLength parameter must be a Number');
+    if (!config.apiUrl)                throw new Error('config.apiUrl is undefined, there is nowhere to send this request');
+    if (!this.parameters)              throw new Error('Missing parameters in the request');
+    if (this.method != 'POST')         throw new Error('You cannot POST a non-post request, check method and try again');
 
     let query = '';
     this.parameters.forEach((key) => {
