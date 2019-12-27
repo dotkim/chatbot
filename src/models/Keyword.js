@@ -20,6 +20,13 @@ class Keyword {
       this.schema[key] = responseObject[key];
     });
   }
+
+  Reply(message) {
+    const GetRandom = require('../old/getRandomInt');
+    let rand = GetRandom(this.schema.values.length);
+    const reply = this.schema.values[rand];
+    message.channel.send(reply);
+  }
 }
 
 module.exports = Keyword;
