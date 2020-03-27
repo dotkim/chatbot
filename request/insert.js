@@ -12,7 +12,7 @@ module.exports = function (name, content) {
 
   let opt = {
     hostname: process.env.APIURL,
-    path: '/insert',
+    path: '/images',
     port: process.env.APIPORT,
     method: 'POST',
     headers: {
