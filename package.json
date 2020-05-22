@@ -1,6 +1,6 @@
 {
   "name": "chatbot",
-  "version": "3.5.2",
+  "version": "3.5.3",
   "description": "Beep boop",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "Kim Nerli",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^11.6.4",
     "dotenv": "^7.0.0",
     "soundex": "^0.2.1"
   },

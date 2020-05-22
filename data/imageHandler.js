@@ -23,6 +23,13 @@ class imageHander {
     let img = files[rand];
     return { path: process.env.DOGDIR + img, name: img };
   }
+
+  async choke() {
+    let files = await fs.readdirSync(process.env.CHOKEDIR)
+    let rand = getRandomInt(files.length);
+    let img = files[rand];
+    return { path: process.env.CHOKEDIR + img, name: img };
+  }
 }
 
 

@@ -74,6 +74,17 @@ client.on('message', async (message) => {
       });
     }
 
+    if (message.content.toLowerCase().includes('choke')) {
+      let obj = await images.choke();
+      console.log(obj);
+      message.channel.send({
+        files: [{
+          attachment: String(obj.path),
+          name: obj.name
+        }]
+      });
+    }
+
     if (
       (message.content.toLowerCase().includes('brainlet')) ||
       (message.content.toLowerCase().includes('retard')) ||
