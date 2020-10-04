@@ -15,20 +15,10 @@ namespace ChatBot.Modules
     {
       var stream = await PictureService.GetCryPictureAsync();
       stream.Seek(0, SeekOrigin.Begin);
-      await Context.Channel.SendFileAsync(stream, "cat.png");
+      await Context.Channel.SendFileAsync(stream, "cat.jpg");
     }
 
-    [Command("userinfo")]
-    public async Task UserInfoAsync(IUser user = null)
-    {
-      user = user ?? Context.User;
-
-      await ReplyAsync(user.ToString());
-    }
-
-    [Command("guild_only")]
-    [RequireContext(ContextType.Guild, ErrorMessage = "Sorry, this command must be ran from within a server, not a DM!")]
-    public Task GuildOnlyCommand()
-        => ReplyAsync("Nothing to see here!");
+    [Command("ping")]
+    public Task PingAsync() => ReplyAsync("pong");
   }
 }

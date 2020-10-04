@@ -1,6 +1,8 @@
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ChatBot.Libraries;
+using ChatBot.Types;
 
 namespace ChatBot.Services
 {
@@ -13,7 +15,10 @@ namespace ChatBot.Services
 
     public async Task<Stream> GetCryPictureAsync()
     {
-      var resp = await _http.GetAsync("https://cataas.com/cat");
+      var loader = new ConfigurationLoader();
+      Configuration config = loader.LoadConfig();
+      
+      var resp = await _http.GetAsync(config.CryUrl);
       return await resp.Content.ReadAsStreamAsync();
     }
   }

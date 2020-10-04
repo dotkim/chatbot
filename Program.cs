@@ -7,6 +7,8 @@ using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
 using ChatBot.Services;
+using ChatBot.Types;
+using ChatBot.Libraries;
 
 namespace ChatBot
 {
@@ -19,12 +21,14 @@ namespace ChatBot
     {
       using (var services = ConfigureServices())
       {
+        var loader = new ConfigurationLoader();
+        Configuration config = loader.LoadConfig();
         var client = services.GetRequiredService<DiscordSocketClient>();
 
         client.Log += LogAsync;
         services.GetRequiredService<CommandService>().Log += LogAsync;
 
-        await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("token"));
+        await client.LoginAsync(TokenType.Bot, config.Token);
         await client.StartAsync();
 
         await services.GetRequiredService<CommandHandlingService>().InitializeAsync();

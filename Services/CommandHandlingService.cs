@@ -35,7 +35,7 @@ namespace ChatBot.Services
       if (message.Source != MessageSource.User) return;
 
       var argPos = 0;
-      if (!message.HasMentionPrefix(_discord.CurrentUser, ref argPos)) return;
+      if (!message.HasCharPrefix('!', ref argPos)) return;
 
       var context = new SocketCommandContext(_discord, message);
       await _commands.ExecuteAsync(context, argPos, _services);
@@ -44,7 +44,11 @@ namespace ChatBot.Services
     public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
     {
       if (!command.IsSpecified)
+      {
+        // might want to branch this out to its own check.
+        
         return;
+      }
 
       if (result.IsSuccess)
         return;
