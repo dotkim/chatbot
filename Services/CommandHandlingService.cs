@@ -44,11 +44,7 @@ namespace ChatBot.Services
     public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
     {
       if (!command.IsSpecified)
-      {
-        // might want to branch this out to its own check.
-        
         return;
-      }
 
       if (result.IsSuccess)
         return;

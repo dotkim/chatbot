@@ -1,6 +1,5 @@
 using System.IO;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 using ChatBot.Services;
 
@@ -9,6 +8,7 @@ namespace ChatBot.Modules
   public class PublicModule : ModuleBase<SocketCommandContext>
   {
     public PictureService PictureService { get; set; }
+    public KeywordService KeywordService { get; set; }
 
     [Command("cry")]
     public async Task CryAsync()
@@ -18,7 +18,14 @@ namespace ChatBot.Modules
       await Context.Channel.SendFileAsync(stream, "cat.jpg");
     }
 
-    [Command("ping")]
-    public Task PingAsync() => ReplyAsync("pong");
+    [Command("keyword")]
+    [Alias("kw")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The keyword command only works from a guild.")]
+    public async Task KeywordAsync(string keyword)
+    {
+      //string keyword = Context.Message.Content.Split(" ")[1];
+      string messageToSend = await KeywordService.GetKeywordAsync(Context.Guild.Id, keyword);
+      await Context.Channel.SendMessageAsync(messageToSend);
+    }
   }
 }
