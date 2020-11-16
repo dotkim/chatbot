@@ -55,7 +55,7 @@ namespace ChatBot
           .AddSingleton<CommandService>()
           .AddSingleton<CommandHandlingService>()
           .AddSingleton<HttpClient>()
-          .AddSingleton<PictureService>()
+          .AddSingleton<ApiService>()
           .AddSingleton<KeywordService>()
           .BuildServiceProvider();
     }

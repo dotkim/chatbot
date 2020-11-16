@@ -7,13 +7,13 @@ namespace ChatBot.Modules
 {
   public class PublicModule : ModuleBase<SocketCommandContext>
   {
-    public PictureService PictureService { get; set; }
+    public ApiService ApiService { get; set; }
     public KeywordService KeywordService { get; set; }
 
     [Command("cry")]
     public async Task CryAsync()
     {
-      var stream = await PictureService.GetCryPictureAsync();
+      var stream = await ApiService.GetCryPictureAsync();
       stream.Seek(0, SeekOrigin.Begin);
       await Context.Channel.SendFileAsync(stream, "cat.jpg");
     }
