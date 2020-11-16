@@ -9,7 +9,10 @@ namespace ChatBot.Services
     public async Task<string> GetKeywordAsync(ulong id, string keyword)
     {
       var db = new Database();
-      Keyword result = await db.LoadKeywordAsync(id, keyword);
+      long lId = (long) id;
+
+      Keyword result = await db.LoadKeywordAsync(lId, keyword);
+      await db.TriggerKeywordUseCount(result);
       return result.Message;
     }
 

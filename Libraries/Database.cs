@@ -1,6 +1,7 @@
 using ChatBot.Types;
 using SQLite;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ChatBot.Libraries
 {
@@ -19,13 +20,18 @@ namespace ChatBot.Libraries
       await Db.CreateTableAsync<Keyword>();
     }
 
-    public async Task<Keyword> LoadKeywordAsync(ulong GuildId, string kw)
+    public async Task<Keyword> LoadKeywordAsync(long guildId, string name)
     {
       var query = Db.Table<Keyword>()
-      .Where(k => k.GuildId.Equals(GuildId) & k.Name.Equals(kw))
+      .Where(k => k.GuildId.Equals(guildId) & k.Name.Equals(name))
       .OrderBy(k => k.UseCount);
 
       return await query.FirstAsync();
+    }
+
+    public async Task<int> TriggerKeywordUseCount(Keyword keyword) {
+      keyword.UseCount += 1;
+      return await Db.UpdateAsync(keyword);
     }
 
     public async Task<int> InsertKeywordAsync(Keyword keyword)
