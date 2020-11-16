@@ -1,7 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
-using Discord.Commands;
 using ChatBot.Services;
+using Discord.Commands;
 
 namespace ChatBot.Modules
 {
@@ -34,6 +34,17 @@ namespace ChatBot.Modules
     {
       string addedMessage = await KeywordService.AddKeywordAsync(Context.Guild.Id, name, message);
       await Context.Channel.SendMessageAsync(addedMessage);
+    }
+
+    [Command("random")]
+    [Alias("r")]
+    public async Task GetRandomAsync()
+    {
+      // Fix to take Context.Guild.Id later.
+      var image = await ApiService.GetRandomImage();
+      var stream = image.ImageStream;
+      stream.Seek(0, SeekOrigin.Begin);
+      await Context.Channel.SendFileAsync(stream, image.Info.fileName);
     }
 
   }
