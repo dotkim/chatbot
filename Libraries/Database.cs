@@ -27,5 +27,10 @@ namespace ChatBot.Libraries
 
       return await query.FirstAsync();
     }
+
+    public async Task<int> InsertKeywordAsync(Keyword keyword)
+    {
+      return await Db.InsertAsync(keyword);
+    }
   }
 }

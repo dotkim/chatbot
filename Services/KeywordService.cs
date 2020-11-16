@@ -12,5 +12,33 @@ namespace ChatBot.Services
       Keyword result = await db.LoadKeywordAsync(id, keyword);
       return result.Message;
     }
+
+    public async Task<string> AddKeywordAsync(ulong id, string name, string message)
+    {
+      var db = new Database();
+      long lId = (long) id;
+
+      int lowestUseCount;
+      try
+      {
+        lowestUseCount = (await db.LoadKeywordAsync(lId, name)).UseCount;
+      }
+      catch
+      {
+        lowestUseCount = 0;
+      }
+
+      Keyword kw = new Keyword
+      {
+        Name = name,
+        GuildId = lId,
+        Message = message,
+        MessageType = "text",
+        UseCount = lowestUseCount
+      };
+
+      int result = await db.InsertKeywordAsync(kw);
+      return kw.Message;
+    }
   }
 }
