@@ -47,5 +47,23 @@ namespace ChatBot.Modules
       await Context.Channel.SendFileAsync(stream, image.Info.fileName);
     }
 
+    [Command("exclude")]
+    [Alias("ex")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The add command only works from a guild.")]
+    public async Task ExcludeImageAsync(ulong id)
+    {
+      var messageToExclude = await Context.Channel.GetMessageAsync(id);
+      //Filename: messageToExclude.Attachments[0].Filename
+      //GuildId: messageToExclude.Channel.Guild.Id
+      if (messageToExclude.Attachments.Count > 0)
+      {
+        foreach (var image in messageToExclude.Attachments)
+        {
+          await ApiService.ExcludeImageFromGuild(image.Filename, Context.Guild.Id.ToString());
+        }
+        await Context.Channel.DeleteMessageAsync(id);
+      }
+
+    }
   }
 }

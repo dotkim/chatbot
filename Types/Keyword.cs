@@ -11,7 +11,7 @@ namespace ChatBot.Types
 
     [Indexed]
     [Column("GuildId")]
-    public int GuildId { get; set; }
+    public long GuildId { get; set; }
 
     [Indexed]
     [Column("Name")]
