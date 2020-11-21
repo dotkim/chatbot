@@ -1,4 +1,5 @@
 using ChatBot.Types;
+using ChatBot.Libraries;
 using SQLite;
 using System.Threading.Tasks;
 
@@ -7,10 +8,13 @@ namespace ChatBot.Libraries
   public class Database
   {
     private SQLiteAsyncConnection Db { get; set; }
+    private readonly Configuration _config;
 
     public Database()
     {
-      var options = new SQLiteConnectionString(":memory:");
+      _config = new ConfigurationLoader().LoadConfig();
+
+      var options = new SQLiteConnectionString(_config.DatabasePath);
       Db = new SQLiteAsyncConnection(options);
     }
 
