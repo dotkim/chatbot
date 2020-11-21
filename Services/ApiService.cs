@@ -19,15 +19,6 @@ namespace ChatBot.Services
       _config = new ConfigurationLoader().LoadConfig();
     }
 
-    private HttpClient CreateClient()
-    {
-      var client = new HttpClient();
-      client.DefaultRequestHeaders.Clear();
-      client.DefaultRequestHeaders.ConnectionClose = true;
-
-      return client;
-    }
-
     public async Task<Stream> GetCryPictureAsync()
     {
       var resp = await _http.GetAsync(_config.CryService);
@@ -47,8 +38,6 @@ namespace ChatBot.Services
 
     public async Task ExcludeImageFromGuild(string name, string guildId)
     {
-      HttpClient client = CreateClient();
-
       var exclude = new ExcludeImageContent { Name = name, GuildId = guildId };
       string stringyfiedJson = Json.Serialize(exclude);
 
@@ -58,7 +47,7 @@ namespace ChatBot.Services
       requestMessage.Headers.Authorization = Authentication.GetAuthenticationString();
       requestMessage.Content = content;
 
-      var resp = await client.SendAsync(requestMessage);
+      var resp = await _http.SendAsync(requestMessage);
       resp.EnsureSuccessStatusCode();
     }
   }
