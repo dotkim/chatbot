@@ -30,8 +30,8 @@ namespace ChatBot.Services
       string apiRespContent = await apiResp.Content.ReadAsStringAsync();
       var imageInfo = Json.Deserialize<ApiImage>(apiRespContent);
 
-      var resp = await _http.GetAsync(imageInfo.url);
-      
+      var resp = await _http.GetAsync(imageInfo.Url);
+
       return new NamedStream { Info = imageInfo, ImageStream = await resp.Content.ReadAsStreamAsync() };
     }
 

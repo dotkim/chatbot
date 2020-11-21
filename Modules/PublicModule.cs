@@ -44,7 +44,7 @@ namespace ChatBot.Modules
       var image = await ApiService.GetRandomImage();
       var stream = image.ImageStream;
       stream.Seek(0, SeekOrigin.Begin);
-      await Context.Channel.SendFileAsync(stream, image.Info.fileName);
+      await Context.Channel.SendFileAsync(stream, image.Info.FileName);
     }
 
     [Command("exclude")]
