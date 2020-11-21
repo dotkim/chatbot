@@ -6,5 +6,8 @@ namespace ChatBot.Types
     public string ApiUrl { get; set; }
     public string RandomService { get; set; }
     public string CryService { get; set; }
+    public string ExcludeService { get; set; }
+    public string ApiUsername { get; set; }
+    public string ApiSecret { get; set; }
   }
 }
