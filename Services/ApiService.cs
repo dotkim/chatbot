@@ -1,10 +1,10 @@
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using ChatBot.Libraries;
 using ChatBot.Types;
+using ChatBot.Security;
 
 namespace ChatBot.Services
 {
@@ -26,14 +26,6 @@ namespace ChatBot.Services
       client.DefaultRequestHeaders.ConnectionClose = true;
 
       return client;
-    }
-
-    private AuthenticationHeaderValue GetAuthentication()
-    {
-      var authenticationString = $"{_config.ApiUsername}:{_config.ApiSecret}";
-      var base64EncodedAuthenticationString =
-        System.Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(authenticationString));
-      return new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
     }
 
     public async Task<Stream> GetCryPictureAsync()
@@ -63,7 +55,7 @@ namespace ChatBot.Services
       var content = new StringContent(stringyfiedJson, Encoding.UTF8, "application/json");
 
       var requestMessage = new HttpRequestMessage(HttpMethod.Post, _config.ExcludeService);
-      requestMessage.Headers.Authorization = GetAuthentication();
+      requestMessage.Headers.Authorization = Authentication.GetAuthenticationString();
       requestMessage.Content = content;
 
       var resp = await client.SendAsync(requestMessage);
