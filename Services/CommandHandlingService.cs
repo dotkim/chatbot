@@ -34,10 +34,12 @@ namespace ChatBot.Services
       if (!(rawMessage is SocketUserMessage message)) return;
       if (message.Source != MessageSource.User) return;
 
+      var context = new SocketCommandContext(_discord, message);
+      AttachmentService.CheckAndFetchAttachment(context);
+
       var argPos = 0;
       if (!message.HasCharPrefix('!', ref argPos)) return;
 
-      var context = new SocketCommandContext(_discord, message);
       await _commands.ExecuteAsync(context, argPos, _services);
     }
 
