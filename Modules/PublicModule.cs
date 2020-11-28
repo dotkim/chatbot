@@ -10,7 +10,7 @@ namespace ChatBot.Modules
     public ApiService ApiService { get; set; }
     public KeywordService KeywordService { get; set; }
 
-    [Command("cry")]
+    [Command("cry", true)]
     [RequireContext(ContextType.Guild, ErrorMessage = "The cry command only works from a guild.")]
     public async Task CryAsync()
     {
@@ -38,7 +38,7 @@ namespace ChatBot.Modules
       await Context.Channel.SendMessageAsync(addedMessage);
     }
 
-    [Command("random")]
+    [Command("random", true)]
     [Alias("r")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The random command only works from a guild.")]
     public async Task GetRandomAsync()
