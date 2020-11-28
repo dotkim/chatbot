@@ -11,11 +11,13 @@ namespace ChatBot.Modules
     public KeywordService KeywordService { get; set; }
 
     [Command("cry")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The cry command only works from a guild.")]
     public async Task CryAsync()
     {
-      var stream = await ApiService.GetCryPictureAsync();
+      var image = await ApiService.GetRandomImage(Context.Guild.Id.ToString(), "cry");
+      var stream = image.ImageStream;
       stream.Seek(0, SeekOrigin.Begin);
-      await Context.Channel.SendFileAsync(stream, "cat.jpg");
+      await Context.Channel.SendFileAsync(stream, image.Info.FileName);
     }
 
     [Command("keyword")]
@@ -38,10 +40,11 @@ namespace ChatBot.Modules
 
     [Command("random")]
     [Alias("r")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The random command only works from a guild.")]
     public async Task GetRandomAsync()
     {
       // Fix to take Context.Guild.Id later.
-      var image = await ApiService.GetRandomImage();
+      var image = await ApiService.GetRandomImage(Context.Guild.Id.ToString());
       var stream = image.ImageStream;
       stream.Seek(0, SeekOrigin.Begin);
       await Context.Channel.SendFileAsync(stream, image.Info.FileName);
@@ -49,7 +52,7 @@ namespace ChatBot.Modules
 
     [Command("exclude")]
     [Alias("ex")]
-    [RequireContext(ContextType.Guild, ErrorMessage = "The add command only works from a guild.")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The exclude command only works from a guild.")]
     public async Task ExcludeImageAsync(ulong id)
     {
       var messageToExclude = await Context.Channel.GetMessageAsync(id);

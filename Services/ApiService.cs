@@ -19,15 +19,12 @@ namespace ChatBot.Services
       _config = new ConfigurationLoader().LoadConfig();
     }
 
-    public async Task<Stream> GetCryPictureAsync()
+    public async Task<NamedStream> GetRandomImage(string guildId, string tag = null)
     {
-      var resp = await _http.GetAsync(_config.CryService);
-      return await resp.Content.ReadAsStreamAsync();
-    }
+      string url = _config.ApiUrl + _config.RandomService.Replace("%1", guildId);
+      if (!string.IsNullOrEmpty(tag)) url += $"&tag={tag}";
 
-    public async Task<NamedStream> GetRandomImage()
-    {
-      var apiResp = await _http.GetAsync(_config.RandomService);
+      var apiResp = await _http.GetAsync(url);
       string apiRespContent = await apiResp.Content.ReadAsStringAsync();
       var imageInfo = Json.Deserialize<ApiImage>(apiRespContent);
 
@@ -43,7 +40,7 @@ namespace ChatBot.Services
 
       var content = new StringContent(stringyfiedJson, Encoding.UTF8, "application/json");
 
-      var requestMessage = new HttpRequestMessage(HttpMethod.Post, _config.ExcludeService);
+      var requestMessage = new HttpRequestMessage(HttpMethod.Post, _config.ApiUrl + _config.ExcludeService);
       requestMessage.Headers.Authorization = Authentication.GetAuthenticationString();
       requestMessage.Content = content;
 
