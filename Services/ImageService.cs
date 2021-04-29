@@ -1,4 +1,3 @@
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +7,12 @@ using ChatBot.Security;
 
 namespace ChatBot.Services
 {
-  public class ApiService
+  public class ImageService
   {
     private readonly HttpClient _http;
     private readonly Configuration _config;
 
-    public ApiService(HttpClient http)
+    public ImageService(HttpClient http)
     {
       _http = http;
       _config = new ConfigurationLoader().LoadConfig();

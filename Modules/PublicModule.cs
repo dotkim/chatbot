@@ -7,7 +7,7 @@ namespace ChatBot.Modules
 {
   public class PublicModule : ModuleBase<SocketCommandContext>
   {
-    public ApiService ApiService { get; set; }
+    public ImageService ApiService { get; set; }
     public KeywordService KeywordService { get; set; }
 
     [Command("cry", true)]
@@ -56,8 +56,6 @@ namespace ChatBot.Modules
     public async Task ExcludeImageAsync(ulong id)
     {
       var messageToExclude = await Context.Channel.GetMessageAsync(id);
-      //Filename: messageToExclude.Attachments[0].Filename
-      //GuildId: messageToExclude.Channel.Guild.Id
       if (messageToExclude.Attachments.Count > 0)
       {
         foreach (var image in messageToExclude.Attachments)

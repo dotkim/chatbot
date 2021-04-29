@@ -9,7 +9,6 @@ using Discord.Commands;
 using ChatBot.Services;
 using ChatBot.Types;
 using ChatBot.Libraries;
-using ChatBot.Common;
 
 namespace ChatBot
 {
@@ -24,8 +23,6 @@ namespace ChatBot
       {
         var loader = new ConfigurationLoader();
         Configuration config = loader.LoadConfig();
-
-        InitializeApplication.Init();
 
         var client = services.GetRequiredService<DiscordSocketClient>();
 
@@ -55,7 +52,7 @@ namespace ChatBot
           .AddSingleton<CommandService>()
           .AddSingleton<CommandHandlingService>()
           .AddSingleton<HttpClient>()
-          .AddSingleton<ApiService>()
+          .AddSingleton<ImageService>()
           .AddSingleton<KeywordService>()
           .BuildServiceProvider();
     }
