@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Discord.Commands;
-using ChatBot.Security;
 using ChatBot.Libraries;
 using ChatBot.Types;
 
@@ -11,8 +10,7 @@ namespace ChatBot.Services
 {
   public static class AttachmentService
   {
-    private static readonly HttpClient _http = new HttpClient();
-    private static readonly Configuration _config = new ConfigurationLoader().LoadConfig();
+    private static readonly Configuration _config = new ConfigurationLoader().LoadConfig<Configuration>();
 
     public static void CheckAndFetchAttachment(SocketCommandContext context)
     {
@@ -33,7 +31,7 @@ namespace ChatBot.Services
         {
           string url = RegexHelper.Url(str);
 
-          if (url.Contains(_config.ApiUrl.Split(".")[1])) continue;
+          if (url.Contains(_config.StaticUrl.Split(".")[1])) continue;
           if (url.Length == 0) continue;
 
           // GET request for the attachment Url.

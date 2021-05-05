@@ -8,7 +8,6 @@ namespace ChatBot.Modules
   public class PublicModule : ModuleBase<SocketCommandContext>
   {
     public ImageService ApiService { get; set; }
-    public KeywordService KeywordService { get; set; }
 
     [Command("cry", true)]
     [RequireContext(ContextType.Guild, ErrorMessage = "The cry command only works from a guild.")]
@@ -26,16 +25,15 @@ namespace ChatBot.Modules
     public async Task KeywordAsync(string keyword)
     {
       //string keyword = Context.Message.Content.Split(" ")[1];
-      string messageToSend = await KeywordService.GetKeywordAsync(Context.Guild.Id, keyword);
+      string messageToSend = await KeywordService.GetAsync(keyword, Context.Guild.Id);
       await Context.Channel.SendMessageAsync(messageToSend);
     }
 
     [Command("add")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The add command only works from a guild.")]
-    public async Task AddAsync(string name, [Remainder] string message)
+    public void AddAsync(string name, [Remainder] string message)
     {
-      string addedMessage = await KeywordService.AddKeywordAsync(Context.Guild.Id, name, message);
-      await Context.Channel.SendMessageAsync(addedMessage);
+      KeywordService.Post(name, Context.Guild.Id, message);
     }
 
     [Command("random", true)]

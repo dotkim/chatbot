@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Discord;
-using Discord.WebSocket;
-using Discord.Commands;
+using ChatBot.Libraries;
 using ChatBot.Services;
 using ChatBot.Types;
-using ChatBot.Libraries;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+
 
 namespace ChatBot
 {
@@ -22,7 +22,7 @@ namespace ChatBot
       using (var services = ConfigureServices())
       {
         var loader = new ConfigurationLoader();
-        Configuration config = loader.LoadConfig();
+        Configuration config = loader.LoadConfig<Configuration>();
 
         var client = services.GetRequiredService<DiscordSocketClient>();
 
@@ -51,9 +51,6 @@ namespace ChatBot
           .AddSingleton<DiscordSocketClient>()
           .AddSingleton<CommandService>()
           .AddSingleton<CommandHandlingService>()
-          .AddSingleton<HttpClient>()
-          .AddSingleton<ImageService>()
-          .AddSingleton<KeywordService>()
           .BuildServiceProvider();
     }
   }

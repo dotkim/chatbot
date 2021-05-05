@@ -1,14 +1,14 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /app
 
-COPY *.csproj ./
+COPY . .
 RUN dotnet restore
 
-COPY . ./
-RUN dotnet publish -c Release -o out
+WORKDIR /app/chatbot
+RUN dotnet publish -c release -o /out --no-restore
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-WORKDIR /chatbot
-COPY --from=build-env /app/out .
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
+WORKDIR /app
+COPY --from=build /out ./
 COPY Configuration.xml .
 ENTRYPOINT ["dotnet", "ChatBot.dll"]
