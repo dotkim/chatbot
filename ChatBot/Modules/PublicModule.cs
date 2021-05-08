@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using ChatBot.Services;
@@ -7,24 +8,27 @@ namespace ChatBot.Modules
 {
   public class PublicModule : ModuleBase<SocketCommandContext>
   {
-    public ImageService ApiService { get; set; }
-
     [Command("cry", true)]
     [RequireContext(ContextType.Guild, ErrorMessage = "The cry command only works from a guild.")]
     public async Task CryAsync()
     {
-      var image = await ApiService.GetRandomImage(Context.Guild.Id.ToString(), "cry");
-      var stream = image.ImageStream;
-      stream.Seek(0, SeekOrigin.Begin);
-      await Context.Channel.SendFileAsync(stream, image.Info.FileName);
+      var image = await ImageService.GetRandomAsync(Context.Guild.Id, "cry");
+      await Context.Channel.SendMessageAsync(image);
+    }
+
+    [Command("brainlet", true)]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The brainlet command only works from a guild.")]
+    public async Task BrainletAsync()
+    {
+      var image = await ImageService.GetRandomAsync(Context.Guild.Id, "brainlet");
+      await Context.Channel.SendMessageAsync(image);
     }
 
     [Command("keyword")]
-    [Alias("kw")]
+    [Alias("k")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The keyword command only works from a guild.")]
     public async Task KeywordAsync(string keyword)
     {
-      //string keyword = Context.Message.Content.Split(" ")[1];
       string messageToSend = await KeywordService.GetAsync(keyword, Context.Guild.Id);
       await Context.Channel.SendMessageAsync(messageToSend);
     }
@@ -45,30 +49,28 @@ namespace ChatBot.Modules
     [Command("random", true)]
     [Alias("r")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The random command only works from a guild.")]
-    public async Task GetRandomAsync()
+    public async Task GetRandomImageAsync()
     {
-      // Fix to take Context.Guild.Id later.
-      var image = await ApiService.GetRandomImage(Context.Guild.Id.ToString());
-      var stream = image.ImageStream;
-      stream.Seek(0, SeekOrigin.Begin);
-      await Context.Channel.SendFileAsync(stream, image.Info.FileName);
+      var image = await ImageService.GetRandomAsync(Context.Guild.Id);
+      await Context.Channel.SendMessageAsync(image);
     }
 
-    [Command("exclude")]
-    [Alias("ex")]
-    [RequireContext(ContextType.Guild, ErrorMessage = "The exclude command only works from a guild.")]
-    public async Task ExcludeImageAsync(ulong id)
+    [Command("vandom", true)]
+    [Alias("v")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The vandom command only works from a guild.")]
+    public async Task GetRandomVideoAsync()
     {
-      var messageToExclude = await Context.Channel.GetMessageAsync(id);
-      if (messageToExclude.Attachments.Count > 0)
-      {
-        foreach (var image in messageToExclude.Attachments)
-        {
-          await ApiService.ExcludeImageFromGuild(image.Filename, Context.Guild.Id.ToString());
-        }
-        await Context.Channel.DeleteMessageAsync(id);
-      }
+      var video = await VideoService.GetRandomAsync(Context.Guild.Id);
+      await Context.Channel.SendMessageAsync(video);
+    }
 
+    [Command("aandom", true)]
+    [Alias("a")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The aandom command only works from a guild.")]
+    public async Task GetRandomAudioAsync()
+    {
+      var audio = await AudioService.GetRandomAsync(Context.Guild.Id);
+      await Context.Channel.SendMessageAsync(audio);
     }
   }
 }
