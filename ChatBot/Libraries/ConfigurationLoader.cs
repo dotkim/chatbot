@@ -32,22 +32,15 @@ namespace ChatBot.Libraries
     /// <returns>Returns a <see cref="Configuration"/> object</returns>
     public T LoadConfig<T>() where T : class
     {
-      try
+      if (!File.Exists(cfgPath))
       {
-        if (!File.Exists(cfgPath))
-        {
-          throw new Exception("File not found.");
-        }
-
-        string cfgContent = File.ReadAllText(cfgPath);
-        var config = Xml.Deserialize<T>(cfgContent);
-
-        return config;
+        throw new Exception("File not found.");
       }
-      catch (Exception err)
-      {
-        throw err;
-      }
+
+      string cfgContent = File.ReadAllText(cfgPath);
+      var config = Xml.Deserialize<T>(cfgContent);
+
+      return config;
     }
   }
 }
