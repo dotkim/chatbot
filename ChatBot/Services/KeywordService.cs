@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using ChatBot.Client;
 using ChatBot.Client.Routes;
-using ChatBot.Client.Types;
+using ChatBot.Types;
 using ChatBot.Libraries;
 
 namespace ChatBot.Services
@@ -9,7 +9,7 @@ namespace ChatBot.Services
   public static class KeywordService
   {
     private static readonly Configuration _config = new ConfigurationLoader().LoadConfig<Configuration>();
-    private static ApiClient _api = new ApiClient(_config);
+    private static ApiClient _api = new ApiClient(_config.BaseUrl, _config.Username, _config.Password);
 
     public async static Task<string> GetAsync(string name, ulong guild)
     {

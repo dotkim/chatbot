@@ -16,7 +16,7 @@ namespace ChatBot.Client.Routes
   }
 
   [Route("/keyword", "POST")]
-  public class PostKeyword
+  public class PostKeyword : IReturn<GetKeywordResponse>
   {
     public string Name { get; set; }
     public ulong GuildId { get; set; }

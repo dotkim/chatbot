@@ -31,9 +31,15 @@ namespace ChatBot.Modules
 
     [Command("add")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The add command only works from a guild.")]
-    public void AddAsync(string name, [Remainder] string message)
+    public async Task Add(string name, [Remainder] string message)
     {
+      const int delay = 3000;
       KeywordService.Post(name, Context.Guild.Id, message);
+      await Task.Delay(delay);
+      var res = await Context.Channel.SendMessageAsync("Added keyword.");
+      await Task.Delay(delay);
+      await res.DeleteAsync();
+      await Context.Message.DeleteAsync();
     }
 
     [Command("random", true)]
