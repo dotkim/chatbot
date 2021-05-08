@@ -2,26 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Discord.Commands;
 using ChatBot.Libraries;
+using ChatBot.Services;
 using ChatBot.Types;
+using Discord.Commands;
 
 namespace ChatBot.Services
 {
   public static class AttachmentService
   {
     private static readonly Configuration _config = new ConfigurationLoader().LoadConfig<Configuration>();
+    private static readonly HttpClient _http = new HttpClient();
 
     public static void CheckAndFetchAttachment(SocketCommandContext context)
     {
       if (context.Message.Attachments.Count > 0)
-        CheckAttachments(context.Message.Attachments);
+        CheckAttachments(context.Guild.Id, context.Message.Attachments);
 
       if (context.Message.Content.Length > 0)
-        CheckContent(context.Message.Id.ToString(), context.Message.Content);
+        CheckContent(context.Guild.Id, context.Message.Id.ToString(), context.Message.Content);
     }
 
-    private static async void CheckContent(string id, string messageContent)
+    private static async void CheckContent(ulong guild, string id, string messageContent)
     {
       string[] splitMessageContent = messageContent.Split(" ");
 
@@ -31,84 +33,94 @@ namespace ChatBot.Services
         {
           string url = RegexHelper.Url(str);
 
-          if (url.Contains(_config.StaticUrl.Split(".")[1])) continue;
-          if (url.Length == 0) continue;
+          if (url.Contains(_config.StaticUrl.Split(".")[1])) continue; // Do not upload an image the api already has.
+          if (string.IsNullOrEmpty(url)) continue;                     // The url variable will return a blank string if no url was found.
 
           // GET request for the attachment Url.
-          byte[] content = await GetFromUri(url);
+          Attachment attachment = await GetFromUri(url);
 
           string extension =
             new Stack<string>(
               url.Split(".")
             ).Pop();
 
-          string name = id + "." + extension;
+          attachment.Name = id + "." + extension;
 
-          SendToApi(name, content);
+          SendToApi(guild, attachment);
         }
         catch (Exception err)
         {
           Console.WriteLine(err.ToString());
         }
-
       }
     }
 
-    private static async void CheckAttachments(IReadOnlyCollection<Discord.Attachment> attachments)
+    private static async void CheckAttachments(ulong guild, IReadOnlyCollection<Discord.Attachment> attachments)
     {
-      foreach (var attch in attachments)
+      foreach (var file in attachments)
       {
         try
         {
           // GET request for the attachment Url.
-          byte[] content = await GetFromUri(attch.Url);
+          Attachment attachment = await GetFromUri(file.Url);
 
           string extension =
             new Stack<string>(
-              attch.Filename.Split(".")
+              file.Filename.Split(".")
             ).Pop();
 
-          string name = attch.Id + "." + extension;
+          attachment.Name = file.Id + "." + extension;
 
-          SendToApi(name, content);
+          SendToApi(guild, attachment);
         }
         catch (Exception err)
         {
           Console.WriteLine(err.ToString());
         }
-
       }
     }
 
-    private static async Task<byte[]> GetFromUri(string uri)
+    private static async Task<Attachment> GetFromUri(string uri)
     {
+      if (string.IsNullOrEmpty(uri)) throw new NullReferenceException("Uri string was null or empty.");
       var response = await _http.GetAsync(uri);
       response.EnsureSuccessStatusCode();
 
-      if (!response.Content.Headers.ContentType.MediaType.Contains("image")) throw
-        new Exception("Content of the URL was not an image.");
 
-      return await response.Content.ReadAsByteArrayAsync();
+      var attachment = new Attachment();
+      attachment.MimeType = response.Content.Headers.ContentType.MediaType;
+
+      switch (attachment.MimeType.Split("/")[0])
+      {
+        case "image":
+          break;
+        case "video":
+          break;
+        case "audio":
+          break;
+        default:
+          throw new Exception($"The content type ${attachment.MimeType} of the URL is not supported.");
+      }
+
+      attachment.Data = await response.Content.ReadAsStreamAsync();
+
+      return attachment;
     }
 
-    private static async void SendToApi(string name, byte[] content)
+    private static void SendToApi(ulong guild, Attachment attachment)
     {
-      string base64EncodedContent = Convert.ToBase64String(content);
-      ApiInsertable body = new ApiInsertable();
-      body.Name = name;
-      body.Content = base64EncodedContent;
-
-      string stringyfiedJson = Json.Serialize(body);
-
-      HttpRequestMessage request =
-        new HttpRequestMessage(HttpMethod.Post, $"{_config.ApiUrl}/images");
-
-      request.Headers.Authorization = Authentication.GetAuthenticationString();
-      request.Content =
-        new StringContent(stringyfiedJson, System.Text.Encoding.UTF8, "application/json");
-
-      var response = await _http.SendAsync(request);
-      response.EnsureSuccessStatusCode();
+      switch (attachment.MimeType.Split("/")[0])
+      {
+        case "image":
+          ImageService.Post(guild, attachment);
+          break;
+        case "video":
+          VideoService.Post(guild, attachment);
+          break;
+        case "audio":
+          AudioService.Post(guild, attachment);
+          break;
+      }
     }
   }
 }
