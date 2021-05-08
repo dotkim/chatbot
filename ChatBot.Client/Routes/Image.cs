@@ -12,10 +12,11 @@ namespace ChatBot.Client.Routes
     public bool Filter { get; set; }
   }
 
-  [Route("/image/random/{GuildId}", "GET")]
+  [Route("/image/random/{GuildId}/{Filter}", "GET")]
   public class GetImageRandom : IReturn<GetImageRandomResponse>
   {
     public ulong GuildId { get; set; }
+    public string Filter { get; set; }
   }
 
   [Route("/image/{GuildId}", "POST")]

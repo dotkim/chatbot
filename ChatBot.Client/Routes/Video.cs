@@ -3,10 +3,11 @@ using ServiceStack;
 
 namespace ChatBot.Client.Routes
 {
-  [Route("/video/random/{GuildId}", "GET")]
+  [Route("/video/random/{GuildId}/{Filter}", "GET")]
   public class GetVideoRandom : IReturn<GetVideoRandomResponse>
   {
     public ulong GuildId { get; set; }
+    public string Filter { get; set; }
   }
 
   [Route("/video/{GuildId}", "POST")]
