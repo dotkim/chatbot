@@ -8,7 +8,7 @@ namespace ChatBot.Types
     // API config.
     public string BaseUrl { get; set; }
     public string Username { get; set; }
-    public string Secret { get; set; }
+    public string Password { get; set; }
 
     // Static web URL
     public string StaticUrl { get; set; }
