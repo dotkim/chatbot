@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ChatBot.Libraries;
-using ChatBot.Services;
 using ChatBot.Types;
 using Discord.Commands;
 

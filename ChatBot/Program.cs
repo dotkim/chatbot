@@ -2,14 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using ChatBot.Client;
 using ChatBot.Libraries;
 using ChatBot.Services;
 using ChatBot.Types;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-
 
 namespace ChatBot
 {
