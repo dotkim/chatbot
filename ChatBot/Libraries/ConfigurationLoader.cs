@@ -12,8 +12,6 @@ namespace ChatBot.Libraries
     static private string defaultConfigPath = Directory.GetCurrentDirectory() + @"/Configuration.xml";
     private string cfgPath;
 
-    private Configuration config = new Configuration();
-
     /// <summary>
     /// Self reffering constructor if no path is provided on a new instance
     /// </summary>
@@ -32,24 +30,17 @@ namespace ChatBot.Libraries
     /// Loads the config from the configuration file
     /// </summary>
     /// <returns>Returns a <see cref="Configuration"/> object</returns>
-    public Configuration LoadConfig()
+    public T LoadConfig<T>() where T : class
     {
-      try
+      if (!File.Exists(cfgPath))
       {
-        if (!File.Exists(cfgPath))
-        {
-          throw new Exception("File not found.");
-        }
-
-        string cfgContent = File.ReadAllText(cfgPath);
-        config = Xml.Deserialize<Configuration>(cfgContent);
-
-        return config;
+        throw new Exception("File not found.");
       }
-      catch (Exception err)
-      {
-        throw err;
-      }
+
+      string cfgContent = File.ReadAllText(cfgPath);
+      var config = Xml.Deserialize<T>(cfgContent);
+
+      return config;
     }
   }
 }

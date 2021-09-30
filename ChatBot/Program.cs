@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Discord;
-using Discord.WebSocket;
-using Discord.Commands;
+using ChatBot.Libraries;
 using ChatBot.Services;
 using ChatBot.Types;
-using ChatBot.Libraries;
-using ChatBot.Common;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
 
 namespace ChatBot
 {
   class Program
   {
+    private Configuration _config;
+    
     static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -23,16 +23,14 @@ namespace ChatBot
       using (var services = ConfigureServices())
       {
         var loader = new ConfigurationLoader();
-        Configuration config = loader.LoadConfig();
-
-        InitializeApplication.Init();
+        _config = loader.LoadConfig<Configuration>();
 
         var client = services.GetRequiredService<DiscordSocketClient>();
 
         client.Log += LogAsync;
         services.GetRequiredService<CommandService>().Log += LogAsync;
 
-        await client.LoginAsync(TokenType.Bot, config.Token);
+        await client.LoginAsync(TokenType.Bot, _config.Token);
         await client.StartAsync();
 
         await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
@@ -54,9 +52,6 @@ namespace ChatBot
           .AddSingleton<DiscordSocketClient>()
           .AddSingleton<CommandService>()
           .AddSingleton<CommandHandlingService>()
-          .AddSingleton<HttpClient>()
-          .AddSingleton<ApiService>()
-          .AddSingleton<KeywordService>()
           .BuildServiceProvider();
     }
   }
