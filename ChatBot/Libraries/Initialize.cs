@@ -25,6 +25,9 @@ namespace ChatBot.Libraries
           Environment.Exit(0);
         }
 
+        // Write an empty line so the next message appears under the last.
+        Console.WriteLine("");
+
         // create config
         Configuration config = new Configuration();
         Console.Write("Input the Discord bot token: ");
