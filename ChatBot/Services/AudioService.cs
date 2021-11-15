@@ -17,7 +17,7 @@ namespace ChatBot.Services
       var query = new GetAudioRandom { GuildId = guild, Filter = filter  };
       GetAudioRandomResponse response = await _api.client.GetAsync(query);
 
-      string url = Path.Combine(_config.StaticUrl, response.Result.Name);
+      string url = Path.Combine(_config.StaticUrl, response.FileInfo.Name);
       return url;
     }
 
