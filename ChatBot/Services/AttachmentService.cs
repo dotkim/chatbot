@@ -32,7 +32,10 @@ namespace ChatBot.Services
         {
           string url = RegexHelper.Url(str);
 
-          if (url.Contains(_config.StaticUrl.Split(".")[1])) continue; // Do not upload an image the api already has.
+          string staticUrl = _config.StaticUrl.Split(".").Length > 1
+            ? _config.StaticUrl.Split(".")[1] : "localhost";
+
+          if (url.Contains(staticUrl)) continue; // Do not upload an image the api already has.
           if (string.IsNullOrEmpty(url)) continue;                     // The url variable will return a blank string if no url was found.
 
           // GET request for the attachment Url.
