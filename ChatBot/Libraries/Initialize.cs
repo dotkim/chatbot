@@ -36,6 +36,21 @@ namespace ChatBot.Libraries
         Console.Write("Input the Base API URL: ");
         config.BaseUrl = Console.ReadLine();
 
+        Console.Write("Do you want to store credentials for the API? (y/N): ");
+        ConsoleKeyInfo credsChoice = Console.ReadKey();
+        if (credsChoice.Key == ConsoleKey.Y)
+        {
+          Console.WriteLine("");
+          Console.Write("Username: ");
+          config.Username = Console.ReadLine();
+          Console.Write("Password: ");
+          config.Password = Console.ReadLine();
+        }
+        else
+        {
+          Console.WriteLine("");
+        }
+
         Console.Write("Input the Static URL: ");
         config.StaticUrl = Console.ReadLine();
 
