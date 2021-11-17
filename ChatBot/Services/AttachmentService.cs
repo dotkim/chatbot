@@ -16,13 +16,13 @@ namespace ChatBot.Services
     public static void CheckAndFetchAttachment(SocketCommandContext context)
     {
       if (context.Message.Attachments.Count > 0)
-        CheckAttachments(context.Guild.Id, context.Message.Attachments);
+        CheckAttachments(context.Guild.Id, context.Message.Author.Id, context.Message.Attachments);
 
       if (context.Message.Content.Length > 0)
-        CheckContent(context.Guild.Id, context.Message.Id.ToString(), context.Message.Content);
+        CheckContent(context.Guild.Id, context.Message.Author.Id, context.Message.Id.ToString(), context.Message.Content);
     }
 
-    private static async void CheckContent(ulong guild, string id, string messageContent)
+    private static async void CheckContent(ulong guild, ulong uploader, string id, string messageContent)
     {
       string[] splitMessageContent = messageContent.Split(" ");
 
@@ -48,7 +48,7 @@ namespace ChatBot.Services
 
           attachment.Name = id + "." + extension;
 
-          SendToApi(guild, attachment);
+          SendToApi(guild, uploader, attachment);
         }
         catch (Exception err)
         {
@@ -57,7 +57,7 @@ namespace ChatBot.Services
       }
     }
 
-    private static async void CheckAttachments(ulong guild, IReadOnlyCollection<Discord.Attachment> attachments)
+    private static async void CheckAttachments(ulong guild, ulong uploader, IReadOnlyCollection<Discord.Attachment> attachments)
     {
       foreach (var file in attachments)
       {
@@ -73,7 +73,7 @@ namespace ChatBot.Services
 
           attachment.Name = file.Id + "." + extension;
 
-          SendToApi(guild, attachment);
+          SendToApi(guild, uploader, attachment);
         }
         catch (Exception err)
         {
@@ -109,18 +109,18 @@ namespace ChatBot.Services
       return attachment;
     }
 
-    private static void SendToApi(ulong guild, Attachment attachment)
+    private static void SendToApi(ulong guild, ulong uploader, Attachment attachment)
     {
       switch (attachment.MimeType.Split("/")[0])
       {
         case "image":
-          ImageService.Post(guild, attachment);
+          ImageService.Post(guild, uploader, attachment);
           break;
         case "video":
-          VideoService.Post(guild, attachment);
+          VideoService.Post(guild, uploader, attachment);
           break;
         case "audio":
-          AudioService.Post(guild, attachment);
+          AudioService.Post(guild, uploader, attachment);
           break;
       }
     }

@@ -21,9 +21,10 @@ namespace ChatBot.Services
       return url;
     }
 
-    public static void Post(ulong guild, Attachment attachment)
+    public static void Post(ulong guild, ulong uploader, Attachment attachment)
     {
-      var response = _api.client.PostFile<PostAudio>("audio/" + guild, attachment.Data, attachment.Name, attachment.MimeType);
+      string path = "audio/" + guild + "/" + uploader;
+      var response = _api.client.PostFile<PostAudio>(path, attachment.Data, attachment.Name, attachment.MimeType);
     }
   }
 }
