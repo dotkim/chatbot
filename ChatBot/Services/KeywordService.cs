@@ -19,12 +19,13 @@ namespace ChatBot.Services
       return response.Result.Message;
     }
 
-    public static void Post(string name, ulong guild, string message)
+    public static void Post(string name, ulong guild, ulong uploader, string message)
     {
       var query = new PostKeyword
       {
         Name = name,
         GuildId = guild,
+        UploaderId = uploader,
         Message = message
       };
 

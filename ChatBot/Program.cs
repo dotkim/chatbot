@@ -20,6 +20,9 @@ namespace ChatBot
 
     public async Task MainAsync()
     {
+      // First init, check config incase its missing.
+      Initialize.Start();
+
       using (var services = ConfigureServices())
       {
         var loader = new ConfigurationLoader();

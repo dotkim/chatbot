@@ -20,6 +20,7 @@ namespace ChatBot.Client.Routes
   {
     public string Name { get; set; }
     public ulong GuildId { get; set; }
+    public ulong UploaderId { get; set; }
     public string Message { get; set; }
   }
 }

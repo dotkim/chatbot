@@ -13,7 +13,7 @@ namespace ChatBot.Client
         UserName = username,
         Password = password,
         AlwaysSendBasicAuthHeader = true
-      }.WithCache();
+      };
     }
   }
 }

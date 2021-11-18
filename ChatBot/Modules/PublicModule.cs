@@ -36,7 +36,7 @@ namespace ChatBot.Modules
     public async Task Add(string name, [Remainder] string message)
     {
       const int delay = 3000;
-      KeywordService.Post(name, Context.Guild.Id, message);
+      KeywordService.Post(name, Context.Guild.Id, Context.Message.Author.Id, message);
       await Task.Delay(delay);
       var res = await Context.Channel.SendMessageAsync("Added keyword.");
       await Task.Delay(delay);

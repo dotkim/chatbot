@@ -3,21 +3,23 @@ using ServiceStack;
 
 namespace ChatBot.Client.Routes
 {
+  [Route("/audio/random/{GuildId}", "GET")]
   [Route("/audio/random/{GuildId}/{Filter}", "GET")]
   public class GetAudioRandom : IReturn<GetAudioRandomResponse>
   {
     public ulong GuildId { get; set; }
-    public string Filter { get; set; }
+    public string Filter { get; set; } = "tagme";
   }
 
-  [Route("/audio/{GuildId}", "POST")]
+  [Route("/audio/{GuildId}/{UploaderId}", "POST")]
   public class PostAudio
   {
     public ulong GuildId { get; set; }
+    public ulong UploaderId { get; set; }
   }
 
   public class GetAudioRandomResponse
   {
-    public Audio Result { get; set; }
+    public Audio FileInfo { get; set; }
   }
 }

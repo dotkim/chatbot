@@ -17,13 +17,14 @@ namespace ChatBot.Services
       var query = new GetAudioRandom { GuildId = guild, Filter = filter  };
       GetAudioRandomResponse response = await _api.client.GetAsync(query);
 
-      string url = Path.Combine(_config.StaticUrl, response.Result.Name);
+      string url = Path.Combine(_config.StaticUrl, response.FileInfo.Name);
       return url;
     }
 
-    public static void Post(ulong guild, Attachment attachment)
+    public static void Post(ulong guild, ulong uploader, Attachment attachment)
     {
-      var response = _api.client.PostFile<PostAudio>("audio/" + guild, attachment.Data, attachment.Name, attachment.MimeType);
+      string path = "audio/" + guild + "/" + uploader;
+      var response = _api.client.PostFile<PostAudio>(path, attachment.Data, attachment.Name, attachment.MimeType);
     }
   }
 }
