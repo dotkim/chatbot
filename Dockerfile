@@ -4,11 +4,10 @@ WORKDIR /app
 COPY . .
 RUN dotnet restore
 
-WORKDIR /app/chatbot
 RUN dotnet publish -c release -o /out --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 COPY --from=build /out ./
-COPY ChatBot/Configuration.xml ./ChatBot/
+COPY ChatBot/Configuration.xml ./
 ENTRYPOINT ["dotnet", "ChatBot.dll"]
