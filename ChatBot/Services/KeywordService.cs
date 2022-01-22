@@ -3,6 +3,7 @@ using ChatBot.Client;
 using ChatBot.Client.Routes;
 using ChatBot.Types;
 using ChatBot.Libraries;
+using System.Collections.Generic;
 
 namespace ChatBot.Services
 {
@@ -17,6 +18,14 @@ namespace ChatBot.Services
       GetKeywordResponse response = await _api.client.GetAsync(query);
 
       return response.Result.Message;
+    }
+
+    public async static Task<List<string>> GetAllNames(ulong guild)
+    {
+      var query = new GetKeywordNames { GuildId = guild };
+      GetKeywordNamesResponse response = await _api.client.GetAsync(query);
+
+      return response.Result;
     }
 
     public static void Post(string name, ulong guild, ulong uploader, string message)

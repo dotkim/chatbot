@@ -22,11 +22,31 @@ namespace ChatBot.Services
 
       _commands.CommandExecuted += CommandExecutedAsync;
       _discord.MessageReceived += MessageReceivedAsync;
+      _discord.MessageReceived += CheckMessageForKeywordReceivedAsync;
     }
 
     public async Task InitializeAsync()
     {
       await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+    }
+
+    public async Task CheckMessageForKeywordReceivedAsync(SocketMessage rawMessage)
+    {
+      if (!(rawMessage is SocketUserMessage message)) return;
+      if (message.Source != MessageSource.User) return;
+
+      var context = new SocketCommandContext(_discord, message);
+      var argPos = 0;
+      if (!message.HasCharPrefix('!', ref argPos)) return;
+
+      var keywords = await KeywordService.GetAllNames(context.Guild.Id);
+      string keywordName = message.Content.Split(" ")[0].Substring(1);
+
+      if (!keywords.Contains(keywordName.ToUpper())) return;
+
+      var getKeywordResult = await KeywordService.GetAsync(keywordName, context.Guild.Id);
+
+      await context.Channel.SendMessageAsync(getKeywordResult);
     }
 
     public async Task MessageReceivedAsync(SocketMessage rawMessage)
