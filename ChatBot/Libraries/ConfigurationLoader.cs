@@ -9,7 +9,7 @@ namespace ChatBot.Libraries
   /// </summary>
   internal class ConfigurationLoader
   {
-    static private string defaultConfigPath = Directory.GetCurrentDirectory() + @"/Configuration.xml";
+    static private string defaultConfigPath = Directory.GetCurrentDirectory() + @"/config/Configuration.xml";
     private string cfgPath;
 
     /// <summary>

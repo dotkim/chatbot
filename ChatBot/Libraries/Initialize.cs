@@ -12,7 +12,7 @@ namespace ChatBot.Libraries
     /// </summary>
     public static void Start()
     {
-      string fileName = Directory.GetCurrentDirectory() + @"/Configuration.xml";
+      string fileName = Directory.GetCurrentDirectory() + @"/config/Configuration.xml";
       // Check if the configuration file exists, if it doesn't the bot will try to create it.
       if (!File.Exists(fileName))
       {

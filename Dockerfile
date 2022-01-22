@@ -9,5 +9,5 @@ RUN dotnet publish -c release -o /out --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 COPY --from=build /out ./
-COPY ChatBot/Configuration.xml ./
+COPY ChatBot/config/Configuration.xml ./config/
 ENTRYPOINT ["dotnet", "ChatBot.dll"]

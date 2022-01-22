@@ -31,7 +31,7 @@ docker run -d chatbot
 
 ## Config
 
-You will need to create a `Configuration.xml` file in the ChatBot directory of the repository (where the dockerfile is). Here is a template:
+You will need to create a `Configuration.xml` file in the ChatBot/config directory of the repository. Here is a template:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
