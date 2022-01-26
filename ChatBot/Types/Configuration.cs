@@ -4,6 +4,7 @@ namespace ChatBot.Types
   {
     // Discord token.
     public string Token { get; set; }
+    public int AvoidDupeCount { get; set; }
 
     // API config.
     public string BaseUrl { get; set; }
