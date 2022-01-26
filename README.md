@@ -37,6 +37,7 @@ You will need to create a `Configuration.xml` file in the ChatBot/config directo
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Token>discord token</Token>
+  <AvoidDupeCount>100</AvoidDupeCount>
   <BaseUrl>the base api url</BaseUrl>
   <StaticUrl>the static url from the api</StaticUrl>
   <Username>api user</Username>
