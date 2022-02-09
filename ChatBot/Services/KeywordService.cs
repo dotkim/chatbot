@@ -17,7 +17,7 @@ namespace ChatBot.Services
       var query = new GetKeyword { Name = name, GuildId = guild };
       GetKeywordResponse response = await _api.client.GetAsync(query);
 
-      return response.Result.Message;
+      return response.Result.Text;
     }
 
     public async static Task<List<string>> GetAllNames(ulong guild)

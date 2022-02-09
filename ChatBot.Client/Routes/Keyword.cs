@@ -19,7 +19,7 @@ namespace ChatBot.Client.Routes
 
   public class GetKeywordResponse
   {
-    public KeywordMessage Result { get; set; }
+    public Message Result { get; set; }
   }
 
   public class GetKeywordNamesResponse
