@@ -31,6 +31,18 @@ namespace ChatBot.Modules
       await Context.Channel.SendMessageAsync(messageToSend);
     }
 
+    [Command("help", true)]
+    [Alias("h")]
+    [RequireContext(ContextType.Guild, ErrorMessage = "The add command only works from a guild.")]
+    public async Task Help()
+    {
+      string commands = "Available commands: random(r), vandom(v), aandom(a), cry, keyword(k) [name], add, help(h)\n";
+      string kinfo = "How to add a keyword:\n!add name text e.g. !add glenn Nå må jeg sove\n";
+      var keywords = await KeywordService.GetAllNames(Context.Guild.Id);
+      string formatted = "Here is a list of keywords:\n" + string.Join("\n", keywords);
+      await Context.Channel.SendMessageAsync(commands + kinfo + formatted);
+    }
+
     [Command("add")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The add command only works from a guild.")]
     public async Task Add(string name, [Remainder] string message)
