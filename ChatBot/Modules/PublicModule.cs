@@ -9,8 +9,6 @@ namespace ChatBot.Modules
   {
     [Command("cry", true)]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The cry command only works from a guild.")]
-    [SlashCommand("cry", "Send a random crying cat.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task CryAsync()
     {
       var image = await ImageService.GetRandomAsync(Context.Guild.Id, "cry");
@@ -19,8 +17,6 @@ namespace ChatBot.Modules
 
     [Command("brainlet", true)]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The brainlet command only works from a guild.")]
-    [SlashCommand("brainlet", "Send a random brainlet.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task BrainletAsync()
     {
       var image = await ImageService.GetRandomAsync(Context.Guild.Id, "brainlet");
@@ -30,8 +26,6 @@ namespace ChatBot.Modules
     [Command("keyword")]
     [Alias("k")]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The keyword command only works from a guild.")]
-    [SlashCommand("keyword", "Send a keyword message.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task KeywordAsync(string keyword)
     {
       string messageToSend = await KeywordService.GetAsync(keyword, Context.Guild.Id);
@@ -41,8 +35,6 @@ namespace ChatBot.Modules
     [Command("help", true)]
     [Alias("h")]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The help command only works from a guild.")]
-    [SlashCommand("help", "Show the help dialog.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task Help()
     {
       string commands = "Available commands: random(r), vandom(v), aandom(a), cry, keyword(k) [name], add, help(h)\n";
@@ -54,8 +46,6 @@ namespace ChatBot.Modules
 
     [Command("add")]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The add command only works from a guild.")]
-    [SlashCommand("add", "Add a keyword.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task Add(string name, [Remainder] string message)
     {
       const int delay = 3000;
@@ -69,8 +59,6 @@ namespace ChatBot.Modules
     [Command("random", true)]
     [Alias("r")]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The random command only works from a guild.")]
-    [SlashCommand("random", "Send a random image file.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task GetRandomImageAsync()
     {
       var image = await ImageService.GetRandomAsync(Context.Guild.Id);
@@ -80,8 +68,6 @@ namespace ChatBot.Modules
     [Command("vandom", true)]
     [Alias("v")]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The vandom command only works from a guild.")]
-    [SlashCommand("vandom", "Send a random video file.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task GetRandomVideoAsync()
     {
       var video = await VideoService.GetRandomAsync(Context.Guild.Id);
@@ -91,8 +77,6 @@ namespace ChatBot.Modules
     [Command("aandom", true)]
     [Alias("a")]
     [Discord.Commands.RequireContext(Discord.Commands.ContextType.Guild, ErrorMessage = "The aandom command only works from a guild.")]
-    [SlashCommand("aandom", "Send a random audio file.")]
-    [Discord.Interactions.RequireContext(Discord.Interactions.ContextType.Guild)]
     public async Task GetRandomAudioAsync()
     {
       var audio = await AudioService.GetRandomAsync(Context.Guild.Id);
