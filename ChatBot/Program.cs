@@ -57,6 +57,7 @@ namespace ChatBot
     private ServiceProvider ConfigureServices()
     {
       return new ServiceCollection()
+          .AddSingleton<DiscordSocketClient>()
           .AddSingleton<CommandService>()
           .AddSingleton<CommandHandlingService>()
           .BuildServiceProvider();
