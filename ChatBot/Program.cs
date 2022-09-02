@@ -28,7 +28,12 @@ namespace ChatBot
         var loader = new ConfigurationLoader();
         _config = loader.LoadConfig<Configuration>();
 
-        var client = services.GetRequiredService<DiscordSocketClient>();
+        var discordConfig = new DiscordSocketConfig()
+        {
+          GatewayIntents = GatewayIntents.All
+        };
+
+        var client = new DiscordSocketClient(discordConfig);
 
         client.Log += LogAsync;
         services.GetRequiredService<CommandService>().Log += LogAsync;
@@ -52,7 +57,6 @@ namespace ChatBot
     private ServiceProvider ConfigureServices()
     {
       return new ServiceCollection()
-          .AddSingleton<DiscordSocketClient>()
           .AddSingleton<CommandService>()
           .AddSingleton<CommandHandlingService>()
           .BuildServiceProvider();
