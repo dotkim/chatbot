@@ -30,7 +30,7 @@ namespace ChatBot
 
         var discordConfig = new DiscordSocketConfig()
         {
-          GatewayIntents = GatewayIntents.All
+          GatewayIntents = GatewayIntents.AllUnprivileged
         };
 
         var client = new DiscordSocketClient(discordConfig);
