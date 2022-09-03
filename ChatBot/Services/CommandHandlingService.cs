@@ -1,7 +1,5 @@
-using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -11,31 +9,29 @@ namespace ChatBot.Services
   public class CommandHandlingService
   {
     private readonly CommandService _commands;
-    private readonly DiscordSocketClient _discord;
-    private readonly IServiceProvider _services;
+    private readonly DiscordSocketClient _client;
 
-    public CommandHandlingService(IServiceProvider services)
+    public CommandHandlingService(DiscordSocketClient client, CommandService commands)
     {
-      _commands = services.GetRequiredService<CommandService>();
-      _discord = services.GetRequiredService<DiscordSocketClient>();
-      _services = services;
+      _commands = commands;
+      _client = client;
+    }
 
+    public async Task InstallCommandsAsync()
+    {
       _commands.CommandExecuted += CommandExecutedAsync;
-      _discord.MessageReceived += MessageReceivedAsync;
-      _discord.MessageReceived += CheckMessageForKeywordReceivedAsync;
+      _client.MessageReceived += MessageReceivedAsync;
+      _client.MessageReceived += CheckMessageForKeywordReceivedAsync;
+      await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(), services: null);
     }
 
-    public async Task InitializeAsync()
+    public async Task CheckMessageForKeywordReceivedAsync(SocketMessage messageParam)
     {
-      await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-    }
-
-    public async Task CheckMessageForKeywordReceivedAsync(SocketMessage rawMessage)
-    {
-      if (!(rawMessage is SocketUserMessage message)) return;
+      var message = messageParam as SocketUserMessage;
       if (message.Source != MessageSource.User) return;
+      if (message == null) return;
 
-      var context = new SocketCommandContext(_discord, message);
+      var context = new SocketCommandContext(_client, message);
       var argPos = 0;
       if (!message.HasCharPrefix('!', ref argPos)) return;
 
@@ -49,18 +45,19 @@ namespace ChatBot.Services
       await context.Channel.SendMessageAsync(getKeywordResult);
     }
 
-    public async Task MessageReceivedAsync(SocketMessage rawMessage)
+    public async Task MessageReceivedAsync(SocketMessage messageParam)
     {
-      if (!(rawMessage is SocketUserMessage message)) return;
+      var message = messageParam as SocketUserMessage;
       if (message.Source != MessageSource.User) return;
+      if (message == null) return;
 
-      var context = new SocketCommandContext(_discord, message);
+      var context = new SocketCommandContext(_client, message);
       AttachmentService.CheckAndFetchAttachment(context);
 
       var argPos = 0;
       if (!message.HasCharPrefix('!', ref argPos)) return;
 
-      await _commands.ExecuteAsync(context, argPos, _services);
+      await _commands.ExecuteAsync(context: context, argPos: argPos, services: null);
     }
 
     public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
