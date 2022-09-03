@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using ChatBot.Libraries;
 using ChatBot.Services;
 using ChatBot.Types;
@@ -14,53 +13,51 @@ namespace ChatBot
   class Program
   {
     private Configuration _config;
-    
-    static void Main(string[] args)
-        => new Program().MainAsync().GetAwaiter().GetResult();
+    private DiscordSocketClient _client;
+    private CommandService _commands;
+
+    public static Task Main(string[] args) => new Program().MainAsync();
 
     public async Task MainAsync()
     {
       // First init, check config incase its missing.
       Initialize.Start();
 
-      using (var services = ConfigureServices())
+      //Load configs
+      var loader = new ConfigurationLoader();
+      _config = loader.LoadConfig<Configuration>();
+
+      var discordClientConfig = new DiscordSocketConfig()
       {
-        var loader = new ConfigurationLoader();
-        _config = loader.LoadConfig<Configuration>();
+        GatewayIntents = GatewayIntents.AllUnprivileged,
+        LogLevel = LogSeverity.Info
+      };
 
-        var discordConfig = new DiscordSocketConfig()
-        {
-          GatewayIntents = GatewayIntents.AllUnprivileged
-        };
+      var commandServiceConfig = new CommandServiceConfig()
+      {
+        LogLevel = LogSeverity.Info
+      };
 
-        var client = new DiscordSocketClient(discordConfig);
+      // Init services
+      _client = new DiscordSocketClient(discordClientConfig);
+      _commands = new CommandService(commandServiceConfig);
 
-        client.Log += LogAsync;
-        services.GetRequiredService<CommandService>().Log += LogAsync;
+      _client.Log += Log;
+      _commands.Log += Log;
 
-        await client.LoginAsync(TokenType.Bot, _config.Token);
-        await client.StartAsync();
+      await _client.LoginAsync(TokenType.Bot, _config.Token);
+      await _client.StartAsync();
 
-        await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
+      var commandHandler = new CommandHandlingService(_client, _commands);
+      await commandHandler.InstallCommandsAsync();
 
-        await Task.Delay(Timeout.Infinite);
-      }
+      await Task.Delay(Timeout.Infinite);
     }
 
-    private Task LogAsync(LogMessage log)
+    private Task Log(LogMessage msg)
     {
-      Console.WriteLine(log.ToString());
-
+      Console.WriteLine(msg.ToString());
       return Task.CompletedTask;
-    }
-
-    private ServiceProvider ConfigureServices()
-    {
-      return new ServiceCollection()
-          .AddSingleton<DiscordSocketClient>()
-          .AddSingleton<CommandService>()
-          .AddSingleton<CommandHandlingService>()
-          .BuildServiceProvider();
     }
   }
 }
