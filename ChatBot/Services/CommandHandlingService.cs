@@ -4,8 +4,8 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace ChatBot.Services
-{
+namespace ChatBot.Services;
+
   public class CommandHandlingService
   {
     private readonly CommandService _commands;
@@ -69,6 +69,5 @@ namespace ChatBot.Services
         return;
 
       await context.Channel.SendMessageAsync($"error: {result}");
-    }
   }
 }
