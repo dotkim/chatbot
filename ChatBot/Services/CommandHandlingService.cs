@@ -35,9 +35,11 @@ public class CommandHandlingService
     var argPos = 0;
     if (!message.HasCharPrefix('!', ref argPos)) return;
 
-    var keywords = await KeywordService.GetAllNamesAsync(context.Guild.Id);
     string keywordName = message.Content.Split(" ")[0].Substring(1);
+    if (keywordName.ToLower() is "r" or "a" or "v") return;
+    if (keywordName.ToLower() is "random" or "aandom" or "vandom") return;
 
+    var keywords = await KeywordService.GetAllNamesAsync(context.Guild.Id);
     if (!keywords.Contains(keywordName.ToUpper())) return;
 
     var getKeywordResult = await KeywordService.GetAsync(keywordName, context.Guild.Id);
