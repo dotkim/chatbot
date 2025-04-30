@@ -37,7 +37,7 @@ public static class VideoService
     {
       if (Previous.Count >= _Config.AvoidDupeCount) Previous.RemoveAt(0);
       Previous.Add(video.Name);
-      string url = Path.Combine(_Config.StaticUrl, video.Name);
+      string url = Path.Combine(_Config.StaticUrl, "videos", video.Name);
       return url;
     }
   }

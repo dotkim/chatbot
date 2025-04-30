@@ -37,7 +37,7 @@ public static class AudioService
     {
       if (Previous.Count >= _Config.AvoidDupeCount) Previous.RemoveAt(0);
       Previous.Add(audio.Name);
-      string url = Path.Combine(_Config.StaticUrl, audio.Name);
+      string url = Path.Combine(_Config.StaticUrl, "audio", audio.Name);
       return url;
     }
   }

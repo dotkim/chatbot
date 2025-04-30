@@ -37,7 +37,7 @@ public static class ImageService
     {
       if (Previous.Count >= _Config.AvoidDupeCount) Previous.RemoveAt(0);
       Previous.Add(image.Name);
-      string url = Path.Combine(_Config.StaticUrl, image.Name);
+      string url = Path.Combine(_Config.StaticUrl, "images", image.Name);
       return url;
     }
   }
