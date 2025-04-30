@@ -4,23 +4,8 @@ using Discord.Commands;
 
 namespace ChatBot.Modules
 {
-  public class PublicModule : ModuleBase<SocketCommandContext>
+  public class TextCommandModule : ModuleBase<SocketCommandContext>
   {
-    [Command("cry", true)]
-    [RequireContext(ContextType.Guild, ErrorMessage = "The cry command only works from a guild.")]
-    public async Task CryAsync()
-    {
-      var image = await ImageService.GetRandomAsync(Context.Guild.Id, "cry");
-      await Context.Channel.SendMessageAsync(image);
-    }
-
-    [Command("brainlet", true)]
-    [RequireContext(ContextType.Guild, ErrorMessage = "The brainlet command only works from a guild.")]
-    public async Task BrainletAsync()
-    {
-      var image = await ImageService.GetRandomAsync(Context.Guild.Id, "brainlet");
-      await Context.Channel.SendMessageAsync(image);
-    }
 
     [Command("keyword")]
     [Alias("k")]
@@ -36,9 +21,9 @@ namespace ChatBot.Modules
     [RequireContext(ContextType.Guild, ErrorMessage = "The help command only works from a guild.")]
     public async Task Help()
     {
-      string commands = "Available commands: random(r), vandom(v), aandom(a), cry, keyword(k) [name], add, help(h)\n";
-      string kinfo = "How to add a keyword:\n!add name text e.g. !add glenn Nå må jeg sove\n";
-      var keywords = await KeywordService.GetAllNames(Context.Guild.Id);
+      string commands = "Available commands: keyword(k) [name], add, help(h)\n";
+      string kinfo = "How to add a keyword:\n!add name text e.g. !add magequest amazing message\n";
+      var keywords = await KeywordService.GetAllNamesAsync(Context.Guild.Id);
       string formatted = "Here is a list of keywords:\n" + string.Join("\n", keywords);
       await Context.Channel.SendMessageAsync(commands + kinfo + formatted);
     }
