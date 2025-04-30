@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChatBot.Client.Types
+namespace Chatbot.Client.Types;
+
+public class Keyword
 {
-  public class Keyword
-  {
-    public string Name { get; set; }
-    public ulong UploaderId { get; set; }
-    public ulong GuildId { get; set; }
-    public List<Message> Messages { get; set; }
-    public List<string> Tags { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public DateTime ModifiedOn { get; set; }
-  }
+  public long Id { get; set; }
+  public string? Name { get; set; }
+  public long GuildId { get; set; }
+  public long UploaderId { get; set; }
+  public List<Message> Messages { get; } = [];
+  public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.Now;
+  public DateTimeOffset ModifiedOn { get; set; }
 }
