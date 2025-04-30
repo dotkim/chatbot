@@ -1,16 +1,28 @@
 using System;
-using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace ChatBot.Client.Types
+namespace Chatbot.Client.Types;
+
+public class Image
 {
-  public class Image
-  {
-    public string Name { get; set; }
-    public ulong GuildId { get; set; }
-    public ulong UploaderId { get; set; }
-    public string Extension { get; set; }
-    public List<string> Tags { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public DateTime ModifiedOn { get; set; }
-  }
+  [JsonPropertyName("id")]
+  public long Id { get; set; }
+
+  [JsonPropertyName("name")]
+  public string? Name { get; set; }
+
+  [JsonPropertyName("guildId")]
+  public long GuildId { get; set; }
+
+  [JsonPropertyName("uploaderId")]
+  public long UploaderId { get; set; }
+
+  [JsonPropertyName("extension")]
+  public string? Extension { get; set; }
+
+  [JsonPropertyName("createOn")]
+  public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.Now;
+
+  [JsonPropertyName("modifiedOn")]
+  public DateTimeOffset ModifiedOn { get; set; }
 }

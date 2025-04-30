@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ChatBot.Libraries;
 using ChatBot.Services;
@@ -8,56 +7,35 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace ChatBot
+namespace ChatBot;
+
+public class Program
 {
-  class Program
+  // Runs a method to prevent the entire app from exiting on an error.
+  public static async Task Main(string[] args)
   {
-    private Configuration _config;
-    private DiscordSocketClient _client;
-    private CommandService _commands;
+    // First init, check config incase its missing.
+    Initialize.Start();
 
-    public static Task Main(string[] args) => new Program().MainAsync();
+    //Load application config
+    ConfigurationLoader configLoader = new();
+    Configuration appConfig = configLoader.LoadConfig<Configuration>();
 
-    public async Task MainAsync()
+    var socketConfig = new DiscordSocketConfig()
     {
-      // First init, check config incase its missing.
-      Initialize.Start();
+      GatewayIntents = GatewayIntents.MessageContent | GatewayIntents.Guilds | GatewayIntents.GuildMessages
+    };
 
-      //Load configs
-      var loader = new ConfigurationLoader();
-      _config = loader.LoadConfig<Configuration>();
+    DiscordSocketClient client = new(socketConfig);
+    CommandService command = new();
 
-      var discordClientConfig = new DiscordSocketConfig()
-      {
-        GatewayIntents = GatewayIntents.AllUnprivileged,
-        LogLevel = LogSeverity.Info
-      };
+    var commandHandlingService = new CommandHandlingService(client, command);
+    await commandHandlingService.InstallCommandsAsync();
 
-      var commandServiceConfig = new CommandServiceConfig()
-      {
-        LogLevel = LogSeverity.Info
-      };
+    _ = new LoggingService(client, command);
 
-      // Init services
-      _client = new DiscordSocketClient(discordClientConfig);
-      _commands = new CommandService(commandServiceConfig);
-
-      _client.Log += Log;
-      _commands.Log += Log;
-
-      await _client.LoginAsync(TokenType.Bot, _config.Token);
-      await _client.StartAsync();
-
-      var commandHandler = new CommandHandlingService(_client, _commands);
-      await commandHandler.InstallCommandsAsync();
-
-      await Task.Delay(Timeout.Infinite);
-    }
-
-    private Task Log(LogMessage msg)
-    {
-      Console.WriteLine(msg.ToString());
-      return Task.CompletedTask;
-    }
+    await client.LoginAsync(TokenType.Bot, appConfig.Token);
+    await client.StartAsync();
+    await Task.Delay(Timeout.Infinite);
   }
 }

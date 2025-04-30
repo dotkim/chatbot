@@ -1,48 +1,50 @@
-using System.IO;
-using System.Threading.Tasks;
-using ChatBot.Client;
-using ChatBot.Client.Routes;
-using ChatBot.Types;
-using ChatBot.Libraries;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Chatbot.Client.Types;
+using ChatBot.Client;
+using ChatBot.Libraries;
+using ChatBot.Types;
 
-namespace ChatBot.Services
+namespace ChatBot.Services;
+
+public static class AudioService
 {
-  public static class AudioService
+  private static readonly Configuration _Config = new ConfigurationLoader().LoadConfig<Configuration>();
+  private static readonly ApiClient _Api = new(_Config.BaseUrl, _Config.Username, _Config.Password);
+
+  private static List<string> Previous = [];
+
+  public async static Task<string> GetRandomAsync(ulong guild, string filter = "tagme", int depth = 0)
   {
-    private static readonly Configuration _config = new ConfigurationLoader().LoadConfig<Configuration>();
-    private static ApiClient _api = new ApiClient(_config.BaseUrl, _config.Username, _config.Password);
-
-    private static List<string> _Previous = new List<string>();
-
-    public async static Task<string> GetRandomAsync(ulong guild, string filter = "tagme", int depth = 0)
+    if (depth >= 10)
     {
-      if (depth >= 10)
-      {
-        _Previous.Clear();
-        throw new TaskCanceledException("The GetRandom method looped to many times. Lower the AvoidDupeCount setting to match the amount of files.");
-      }
-
-      var query = new GetAudioRandom { GuildId = guild, Filter = filter  };
-      GetAudioRandomResponse response = await _api.client.GetAsync(query);
-
-      if (_Previous.Contains(response.FileInfo.Name))
-      {
-        return await GetRandomAsync(guild, filter, depth+1);
-      }
-      else
-      {
-        if (_Previous.Count >= _config.AvoidDupeCount) _Previous.RemoveAt(0);
-        _Previous.Add(response.FileInfo.Name);
-        string url = Path.Combine(_config.StaticUrl, response.FileInfo.Name);
-        return url;
-      }
+      Previous.Clear();
+      throw new TaskCanceledException("The GetRandom method looped to many times. Lower the AvoidDupeCount setting to match the amount of files.");
     }
 
-    public static void Post(ulong guild, ulong uploader, Attachment attachment)
+    string route = $"audio/{guild}/{filter}";
+    string response = await _Api.GetAsync(route);
+
+    Audio audio = JsonSerializer.Deserialize<Audio>(response);
+
+    if (Previous.Contains(audio.Name))
     {
-      string path = "audio/" + guild + "/" + uploader;
-      var response = _api.client.PostFile<PostAudio>(path, attachment.Data, attachment.Name, attachment.MimeType);
+      return await GetRandomAsync(guild, filter, depth + 1);
     }
+    else
+    {
+      if (Previous.Count >= _Config.AvoidDupeCount) Previous.RemoveAt(0);
+      Previous.Add(audio.Name);
+      string url = Path.Combine(_Config.StaticUrl, "audio", audio.Name);
+      return url;
+    }
+  }
+
+  public static void Post(ulong guild, ulong uploader, Attachment attachment)
+  {
+    string path = "audio/" + guild + "/" + uploader;
+    var response = _Api.PostFileAsync(path, attachment.Data, attachment.Name, attachment.MimeType);
   }
 }

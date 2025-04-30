@@ -9,7 +9,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/ChatBot/bin/Debug/netcoreapp5.0/ChatBot.dll",
+      "program": "${workspaceFolder}/ChatBot/bin/Debug/net9.0/ChatBot.dll",
       "args": [],
       "cwd": "${workspaceFolder}/ChatBot",
       "console": "internalConsole",
