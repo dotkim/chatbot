@@ -23,7 +23,7 @@ public class Program
 
     var socketConfig = new DiscordSocketConfig()
     {
-      GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+      GatewayIntents = GatewayIntents.MessageContent | GatewayIntents.Guilds | GatewayIntents.GuildMessages
     };
 
     DiscordSocketClient client = new(socketConfig);
