@@ -64,7 +64,7 @@ public class ApiClient
 
     keyword = JsonSerializer.Deserialize<Keyword>(await keywordwResponse.Content.ReadAsStringAsync());
 
-    string route = $"{name}/{guildId}";
+    string route = $"message/{name}/{guildId}";
     Message message = new() { KeywordId = keyword.Id, UploaderId = uploaderId, Text = text };
 
     using HttpResponseMessage messageResponse = await _client.PostAsJsonAsync(route, message);
