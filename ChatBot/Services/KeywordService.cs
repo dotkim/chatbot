@@ -24,7 +24,7 @@ public static class KeywordService
 
   public async static Task<List<string>> GetAllNamesAsync(ulong guild)
   {
-    string route = $"all/{guild}";
+    string route = $"keyword/all/{guild}";
     string response = await _Api.GetAsync(route);
 
     List<Keyword> keywords = JsonSerializer.Deserialize<List<Keyword>>(response);
@@ -35,8 +35,6 @@ public static class KeywordService
 
   public static void Post(string name, ulong guild, ulong uploader, string message)
   {
-    long longGuild = (long)guild + long.MinValue;
-    long longUploader = (long)uploader + long.MinValue;
-    _Api.PostKeywordAsync(name, longGuild, longUploader, message);
+    _Api.PostKeywordAsync(name, (long)guild, (long)uploader, message);
   }
 }
