@@ -12,7 +12,7 @@ namespace ChatBot;
 public class Program
 {
   // Runs a method to prevent the entire app from exiting on an error.
-  static async void Main(string[] args)
+  public static async Task Main(string[] args)
   {
     // First init, check config incase its missing.
     Initialize.Start();
@@ -23,7 +23,7 @@ public class Program
 
     var socketConfig = new DiscordSocketConfig()
     {
-      GatewayIntents = GatewayIntents.All
+      GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
     };
 
     DiscordSocketClient client = new(socketConfig);
