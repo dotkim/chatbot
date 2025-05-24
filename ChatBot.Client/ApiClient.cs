@@ -1,8 +1,7 @@
-using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Chatbot.Client.Types;
@@ -13,33 +12,15 @@ public class ApiClient
 {
   private readonly HttpClient _client;
 
-  public ApiClient(string url)
+  public ApiClient(HttpClient client)
   {
-    _client = new()
-    {
-      BaseAddress = new Uri(url)
-    };
-  }
-
-  public ApiClient(string url, string username, string password)
-  {
-    string credentials = $"{username}:{password}";
-    string b64credentials = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(credentials));
-
-    _client = new()
-    {
-      BaseAddress = new Uri(url),
-      DefaultRequestHeaders =
-        {
-          Authorization = new AuthenticationHeaderValue("Basic", b64credentials)
-        }
-    };
+    _client = client;
   }
 
   public async Task<string> GetAsync(string route)
   {
     using HttpResponseMessage response = await _client.GetAsync(route);
-    response.EnsureSuccessStatusCode().WriteRequestToConsole();
+    response.EnsureSuccessStatusCode();
 
     var jsonResponse = await response.Content.ReadAsStringAsync();
     return jsonResponse;
@@ -48,19 +29,28 @@ public class ApiClient
   public async Task<Message> GetKeywordMessageAsync(string route)
   {
     using HttpResponseMessage response = await _client.GetAsync(route);
-    response.EnsureSuccessStatusCode().WriteRequestToConsole();
+    response.EnsureSuccessStatusCode();
 
     var jsonResponse = await response.Content.ReadAsStringAsync();
 
     return JsonSerializer.Deserialize<Message>(jsonResponse);
   }
 
-  public async void PostKeywordAsync(string name, long guildId, long uploaderId, string text)
+  public async Task<string> PutAsync(string route, string body)
+  {
+    var content = new StringContent(body, Encoding.UTF8, "application/json");
+    using HttpResponseMessage response = await _client.PutAsync(route, content);
+    response.EnsureSuccessStatusCode();
+
+    return await response.Content.ReadAsStringAsync();
+  }
+
+  public async Task PostKeywordAsync(string name, long guildId, long uploaderId, string text)
   {
     Keyword keyword = new() { Name = name, GuildId = guildId, UploaderId = uploaderId };
 
     using HttpResponseMessage keywordwResponse = await _client.PostAsJsonAsync("keyword", keyword);
-    keywordwResponse.EnsureSuccessStatusCode().WriteRequestToConsole();
+    keywordwResponse.EnsureSuccessStatusCode();
 
     keyword = JsonSerializer.Deserialize<Keyword>(await keywordwResponse.Content.ReadAsStringAsync());
 
@@ -68,7 +58,7 @@ public class ApiClient
     Message message = new() { KeywordId = keyword.Id, UploaderId = uploaderId, Text = text };
 
     using HttpResponseMessage messageResponse = await _client.PostAsJsonAsync(route, message);
-    messageResponse.EnsureSuccessStatusCode().WriteRequestToConsole();
+    messageResponse.EnsureSuccessStatusCode();
   }
 
   public async Task<string> PostFileAsync(string route, Stream data, string filename, string mimetype)
@@ -79,9 +69,17 @@ public class ApiClient
     };
 
     using HttpResponseMessage response = await _client.PostAsync(route, content);
-    response.EnsureSuccessStatusCode().WriteRequestToConsole();
+    response.EnsureSuccessStatusCode();
 
     var jsonResponse = await response.Content.ReadAsStringAsync();
     return jsonResponse;
+  }
+
+  public async Task<string> DeleteFileAsync(string route)
+  {
+    using HttpResponseMessage response = await _client.DeleteAsync(route);
+    response.EnsureSuccessStatusCode();
+
+    return await response.Content.ReadAsStringAsync();
   }
 }

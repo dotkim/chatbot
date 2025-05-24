@@ -7,4 +7,5 @@ services:
       - ../.:/chatbot:cached
     command: sleep infinity
     environment:
+      - "DOTNET_ENVIRONMENT=Development"
       - "ASPNETCORE_ENVIRONMENT=Development"

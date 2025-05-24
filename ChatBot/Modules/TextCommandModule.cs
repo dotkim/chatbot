@@ -1,18 +1,34 @@
 using System.Threading.Tasks;
-using ChatBot.Services;
+using ChatBot.Features;
 using Discord.Commands;
 
 namespace ChatBot.Modules
 {
   public class TextCommandModule : ModuleBase<SocketCommandContext>
   {
+    private readonly KeywordService _keywordService;
+    private readonly ImageService _imageService;
+    private readonly VideoService _videoService;
+    private readonly AudioService _audioService;
+
+    public TextCommandModule(
+        KeywordService keywordService,
+        ImageService imageService,
+        VideoService videoService,
+        AudioService audioService)
+    {
+      _keywordService = keywordService;
+      _imageService = imageService;
+      _videoService = videoService;
+      _audioService = audioService;
+    }
 
     [Command("keyword")]
     [Alias("k")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The keyword command only works from a guild.")]
     public async Task KeywordAsync(string keyword)
     {
-      string messageToSend = await KeywordService.GetAsync(keyword, Context.Guild.Id);
+      string messageToSend = await _keywordService.GetAsync(keyword, Context.Guild.Id);
       await Context.Channel.SendMessageAsync(messageToSend);
     }
 
@@ -23,7 +39,7 @@ namespace ChatBot.Modules
     {
       string commands = "Available commands: keyword(k) [name], add, help(h)\n";
       string kinfo = "How to add a keyword:\n!add name text e.g. !add magequest amazing message\n";
-      var keywords = await KeywordService.GetAllNamesAsync(Context.Guild.Id);
+      var keywords = await _keywordService.GetAllNamesAsync(Context.Guild.Id);
       string formatted = "Here is a list of keywords:\n" + string.Join("\n", keywords);
       await Context.Channel.SendMessageAsync(commands + kinfo + formatted);
     }
@@ -33,7 +49,7 @@ namespace ChatBot.Modules
     public async Task Add(string name, [Remainder] string message)
     {
       const int delay = 3000;
-      KeywordService.Post(name, Context.Guild.Id, Context.Message.Author.Id, message);
+      await _keywordService.PostAsync(name, Context.Guild.Id, Context.Message.Author.Id, message);
       var res = await Context.Channel.SendMessageAsync("Added keyword.");
       await Task.Delay(delay);
       await res.DeleteAsync();
@@ -43,27 +59,27 @@ namespace ChatBot.Modules
     [Command("random", true)]
     [Alias("r")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The random command only works from a guild.")]
-    public async Task GetRandomImageAsync()
+    public async Task GetRandomImageAsync([Remainder] string _ = null)
     {
-      var image = await ImageService.GetRandomAsync(Context.Guild.Id);
+      var image = await _imageService.GetRandomAsync(Context.Guild.Id);
       await Context.Channel.SendMessageAsync(image);
     }
 
     [Command("vandom", true)]
     [Alias("v")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The vandom command only works from a guild.")]
-    public async Task GetRandomVideoAsync()
+    public async Task GetRandomVideoAsync([Remainder] string _ = null)
     {
-      var video = await VideoService.GetRandomAsync(Context.Guild.Id);
+      var video = await _videoService.GetRandomAsync(Context.Guild.Id);
       await Context.Channel.SendMessageAsync(video);
     }
 
     [Command("aandom", true)]
     [Alias("a")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The aandom command only works from a guild.")]
-    public async Task GetRandomAudioAsync()
+    public async Task GetRandomAudioAsync([Remainder] string _ = null)
     {
-      var audio = await AudioService.GetRandomAsync(Context.Guild.Id);
+      var audio = await _audioService.GetRandomAsync(Context.Guild.Id);
       await Context.Channel.SendMessageAsync(audio);
     }
   }

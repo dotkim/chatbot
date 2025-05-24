@@ -1,41 +1,26 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using ChatBot.Libraries;
-using ChatBot.Services;
-using ChatBot.Types;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace ChatBot;
 
 public class Program
 {
-  // Runs a method to prevent the entire app from exiting on an error.
   public static async Task Main(string[] args)
   {
-    // First init, check config incase its missing.
-    Initialize.Start();
+    var host = Host.CreateDefaultBuilder(args)
+      .ConfigureServices((context, services) =>
+      {
+        var startup = new Startup(context.Configuration);
+        startup.ConfigureServices(context, services);
+      })
+      .ConfigureLogging((context, logging) =>
+      {
+        var startup = new Startup(context.Configuration);
+        startup.ConfigureLogging(context, logging);
+      })
+      .Build();
 
-    //Load application config
-    ConfigurationLoader configLoader = new();
-    Configuration appConfig = configLoader.LoadConfig<Configuration>();
-
-    var socketConfig = new DiscordSocketConfig()
-    {
-      GatewayIntents = GatewayIntents.MessageContent | GatewayIntents.Guilds | GatewayIntents.GuildMessages
-    };
-
-    DiscordSocketClient client = new(socketConfig);
-    CommandService command = new();
-
-    var commandHandlingService = new CommandHandlingService(client, command);
-    await commandHandlingService.InstallCommandsAsync();
-
-    _ = new LoggingService(client, command);
-
-    await client.LoginAsync(TokenType.Bot, appConfig.Token);
-    await client.StartAsync();
-    await Task.Delay(Timeout.Infinite);
+    System.Console.WriteLine("running host.");
+    await host.RunAsync();
   }
 }
