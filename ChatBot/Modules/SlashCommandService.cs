@@ -55,7 +55,7 @@ namespace ChatBot.Modules
       [Autocomplete(typeof(MediaTypeAutocompleteHandler))]
       [Summary("type", "The type of file: 'image', 'video', or 'audio'.")] string type,
       [Summary("id", "The id of the message with the file")] string messageId,
-      [Summary("tag", "Optional tag to search for a specific image")] string filename = null
+      [Summary("filename", "Optional filename to search for a specific file")] string filename = null
     )
     {
       if (string.IsNullOrEmpty(filename))
@@ -139,7 +139,7 @@ namespace ChatBot.Modules
       [Summary("type", "the type of file e.g. image, video, audio")] string type,
       [Summary("id", "the id of the message with the file to tag")] string messageId,
       [Summary("tag", "the tag name to add.")] string tagName,
-      [Summary("tag", "Optional tag to search for a specific image")] string filename = null
+      [Summary("filename", "Optional filename to search for a specific file")] string filename = null
     )
     {
       if (string.IsNullOrEmpty(filename))
@@ -184,7 +184,7 @@ namespace ChatBot.Modules
       [Summary("type", "the type of file e.g. image, video, audio")] string type,
       [Summary("id", "the id of the message with the file to untag")] string messageId,
       [Summary("tag", "the tag name to remove.")] string tagName,
-      [Summary("tag", "Optional tag to search for a specific image")] string filename = null
+      [Summary("filename", "Optional filename to search for a specific file")] string filename = null
     )
     {
       if (string.IsNullOrEmpty(filename))
@@ -319,7 +319,7 @@ namespace ChatBot.Modules
       [Autocomplete(typeof(MediaTypeAutocompleteHandler))]
       [Summary("type", "The type of file: 'image', 'video', or 'audio'.")] string type,
       [Summary("id", "The id of the message with the file to delete")] string messageId,
-      [Summary("tag", "Optional tag to search for a specific image")] string filename = null
+      [Summary("filename", "Optional filename to search for a specific file")] string filename = null
     )
     {
       if (string.IsNullOrEmpty(filename))
