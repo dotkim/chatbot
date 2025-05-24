@@ -20,7 +20,7 @@ public class ApiClient
   public async Task<string> GetAsync(string route)
   {
     using HttpResponseMessage response = await _client.GetAsync(route);
-    response.EnsureSuccessStatusCode().WriteRequestToConsole();
+    response.EnsureSuccessStatusCode();
 
     var jsonResponse = await response.Content.ReadAsStringAsync();
     return jsonResponse;
@@ -29,7 +29,7 @@ public class ApiClient
   public async Task<Message> GetKeywordMessageAsync(string route)
   {
     using HttpResponseMessage response = await _client.GetAsync(route);
-    response.EnsureSuccessStatusCode().WriteRequestToConsole();
+    response.EnsureSuccessStatusCode();
 
     var jsonResponse = await response.Content.ReadAsStringAsync();
 
@@ -50,7 +50,7 @@ public class ApiClient
     Keyword keyword = new() { Name = name, GuildId = guildId, UploaderId = uploaderId };
 
     using HttpResponseMessage keywordwResponse = await _client.PostAsJsonAsync("keyword", keyword);
-    keywordwResponse.EnsureSuccessStatusCode().WriteRequestToConsole();
+    keywordwResponse.EnsureSuccessStatusCode();
 
     keyword = JsonSerializer.Deserialize<Keyword>(await keywordwResponse.Content.ReadAsStringAsync());
 
@@ -58,7 +58,7 @@ public class ApiClient
     Message message = new() { KeywordId = keyword.Id, UploaderId = uploaderId, Text = text };
 
     using HttpResponseMessage messageResponse = await _client.PostAsJsonAsync(route, message);
-    messageResponse.EnsureSuccessStatusCode().WriteRequestToConsole();
+    messageResponse.EnsureSuccessStatusCode();
   }
 
   public async Task<string> PostFileAsync(string route, Stream data, string filename, string mimetype)
@@ -69,7 +69,7 @@ public class ApiClient
     };
 
     using HttpResponseMessage response = await _client.PostAsync(route, content);
-    response.EnsureSuccessStatusCode().WriteRequestToConsole();
+    response.EnsureSuccessStatusCode();
 
     var jsonResponse = await response.Content.ReadAsStringAsync();
     return jsonResponse;
