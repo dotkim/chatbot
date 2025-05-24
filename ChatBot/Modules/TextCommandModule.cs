@@ -59,7 +59,7 @@ namespace ChatBot.Modules
     [Command("random", true)]
     [Alias("r")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The random command only works from a guild.")]
-    public async Task GetRandomImageAsync()
+    public async Task GetRandomImageAsync([Remainder] string _ = null)
     {
       var image = await _imageService.GetRandomAsync(Context.Guild.Id);
       await Context.Channel.SendMessageAsync(image);
@@ -68,7 +68,7 @@ namespace ChatBot.Modules
     [Command("vandom", true)]
     [Alias("v")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The vandom command only works from a guild.")]
-    public async Task GetRandomVideoAsync()
+    public async Task GetRandomVideoAsync([Remainder] string _ = null)
     {
       var video = await _videoService.GetRandomAsync(Context.Guild.Id);
       await Context.Channel.SendMessageAsync(video);
@@ -77,7 +77,7 @@ namespace ChatBot.Modules
     [Command("aandom", true)]
     [Alias("a")]
     [RequireContext(ContextType.Guild, ErrorMessage = "The aandom command only works from a guild.")]
-    public async Task GetRandomAudioAsync()
+    public async Task GetRandomAudioAsync([Remainder] string _ = null)
     {
       var audio = await _audioService.GetRandomAsync(Context.Guild.Id);
       await Context.Channel.SendMessageAsync(audio);
