@@ -1,8 +1,7 @@
-using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Chatbot.Client.Types;
@@ -13,27 +12,9 @@ public class ApiClient
 {
   private readonly HttpClient _client;
 
-  public ApiClient(string url)
+  public ApiClient(HttpClient client)
   {
-    _client = new()
-    {
-      BaseAddress = new Uri(url)
-    };
-  }
-
-  public ApiClient(string url, string username, string password)
-  {
-    string credentials = $"{username}:{password}";
-    string b64credentials = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(credentials));
-
-    _client = new()
-    {
-      BaseAddress = new Uri(url),
-      DefaultRequestHeaders =
-        {
-          Authorization = new AuthenticationHeaderValue("Basic", b64credentials)
-        }
-    };
+    _client = client;
   }
 
   public async Task<string> GetAsync(string route)
