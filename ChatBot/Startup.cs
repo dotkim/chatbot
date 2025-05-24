@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http.Headers;
+using Chatbot;
 using ChatBot.Client;
 using ChatBot.Features;
 using ChatBot.Services;
@@ -72,6 +73,6 @@ public class Startup(IConfiguration configuration)
   public void ConfigureLogging(HostBuilderContext context, ILoggingBuilder logging)
   {
     logging.ClearProviders();
-    logging.AddConsole();
+    logging.AddProvider(new ChatbotLoggerProvider());
   }
 }
