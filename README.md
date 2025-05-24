@@ -2,45 +2,76 @@
 
 Beep boop
 
-This Chatbot requires that you have an [API](https://github.com/dotkim/api) running as a backend.
+This Chatbot requires that you have an API running as a backend. Currently it is NOT public.
 
 This bot is made to store and serve images, videos, audio and keywords(text). While in a guild it will check every message for file content and store it. It also reacts to keywords to store and serve text.
 
-## Installing
+# Installing
 
 Currently, the only way to install this is to build it yourself, i do this with Docker and will provide a way to do it with that.
 
 First clone the repo:
 
-```
+```bash
+mkdir -p ~/discordbot
+cd ~/discordbot
 git clone https://github.com/dotkim/chatbot.git
-cd chatbot
 ```
 
-Build the docker image (NOTE: You might want to configure the chatbot first, the config gets pulled into the image.):
+## Setting up the compose directory
 
-```
-docker build -t chatbot .
+Change this to suit however youd like.
+
+```bash
+mkdir -p ~/compose/chatbot/config
+touch ~/compose/chatbot/docker-compose.yml
+cp ~/discordbot/ChatBot/appsettings.json ~/compose/chatbot/config/appsettings.json
 ```
 
-To run the chatbot:
+and paste this into the `docker-compose.yml` file.
 
-```
-docker run -d chatbot
+```yaml
+services:
+  bot:
+    build: ../../discordbot/chatbot
+    image: chatbot:latest
+    pull_policy: never
+    environment:
+      - DOTNET_NOLOGO=1 #Remove logos and stuff from prod.
+      - DOTNET_CLI_TELEMETRY_OPTOUT=1 #Dont send usage data.
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
+      - DOTNET_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Production
+    volumes:
+      - ./config/appsettings.json:/app/appsettings.json:ro
+    restart: unless-stopped
 ```
 
 ## Config
 
-You will need to create a `Configuration.xml` file in the ChatBot/config directory of the repository. Here is a template:
+Open the `appsettings.json` file and set the settings
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Token>discord token</Token>
-  <AvoidDupeCount>100</AvoidDupeCount>
-  <BaseUrl>the base api url</BaseUrl>
-  <StaticUrl>the static url from the api</StaticUrl>
-  <Username>api user</Username>
-  <Password>api pw</Password>
-</Configuration>
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Information",
+      "ChatBot.Services.CommandHandlingService": "Information"
+    }
+  },
+  "DiscordSettings": {
+    "Token": "YOUR_DISCORD_BOT_TOKEN_HERE",
+    "TestGuildId": "Dont need to fill this"
+  },
+  "ApiSettings": {
+    "BaseUrl": "the base url for the API",
+    "Username": "",
+    "Password": "",
+    "StaticUrl": "the static URL to redirect to"
+  },
+  "Processing": {
+    "AvoidDupeCount": 10
+  }
+}
 ```
