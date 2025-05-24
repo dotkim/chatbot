@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Chatbot.Client.Types;
@@ -19,6 +20,9 @@ public class Video
 
   [JsonPropertyName("extension")]
   public string? Extension { get; set; }
+
+  [JsonPropertyName("tags")]
+  public List<Tag> Tags { get; set; } = [];
 
   [JsonPropertyName("createOn")]
   public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.Now;
