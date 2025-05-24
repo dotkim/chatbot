@@ -58,19 +58,21 @@ namespace ChatBot.Modules
       [Summary("filename", "Optional filename to search for a specific file")] string filename = null
     )
     {
+      await DeferAsync(ephemeral: true);
+
       if (string.IsNullOrEmpty(filename))
       {
         if (!ulong.TryParse(messageId, out var msgId))
         {
-          await RespondAsync("Invalid message ID!", ephemeral: true);
+          await FollowupAsync("Invalid message ID!", ephemeral: true);
           return;
         }
 
-        string error; 
+        string error;
         (filename, error) = await TryGetStaticFilename(Context, msgId);
         if (filename == null)
         {
-          await RespondAsync(error, ephemeral: true);
+          await FollowupAsync(error, ephemeral: true);
           return;
         }
       }
@@ -101,17 +103,17 @@ namespace ChatBot.Modules
             break;
           }
         default:
-          await RespondAsync($"Unknown type '{type}'. Please use 'image', 'video', or 'audio'.", ephemeral: true);
+          await FollowupAsync($"Unknown type '{type}'. Please use 'image', 'video', or 'audio'.", ephemeral: true);
           return;
       }
 
       if (formattedInfo == null)
       {
-        await RespondAsync("No info found for this file.", ephemeral: true);
+        await FollowupAsync("No info found for this file.", ephemeral: true);
         return;
       }
 
-      await RespondAsync(formattedInfo, ephemeral: true);
+      await FollowupAsync(formattedInfo, ephemeral: true);
     }
 
     // Generic formatter for Image, Video, or Audio types
@@ -142,19 +144,21 @@ namespace ChatBot.Modules
       [Summary("filename", "Optional filename to search for a specific file")] string filename = null
     )
     {
+      await DeferAsync(ephemeral: true);
+
       if (string.IsNullOrEmpty(filename))
       {
         if (!ulong.TryParse(messageId, out var msgId))
         {
-          await RespondAsync("Invalid message ID!", ephemeral: true);
+          await FollowupAsync("Invalid message ID!", ephemeral: true);
           return;
         }
 
-        string error; 
+        string error;
         (filename, error) = await TryGetStaticFilename(Context, msgId);
         if (filename == null)
         {
-          await RespondAsync(error, ephemeral: true);
+          await FollowupAsync(error, ephemeral: true);
           return;
         }
       }
@@ -173,9 +177,9 @@ namespace ChatBot.Modules
         case "video": response = await _videoService.TagAsync(dto); break;
         case "audio": response = await _audioService.TagAsync(dto); break;
         default:
-          await RespondAsync($"Unknown type '{type}'.", ephemeral: true); return;
+          await FollowupAsync($"Unknown type '{type}'.", ephemeral: true); return;
       }
-      await RespondAsync(response, ephemeral: true);
+      await FollowupAsync(response, ephemeral: true);
     }
 
     [SlashCommand("untag", "Remove a tag from a file")]
@@ -187,19 +191,21 @@ namespace ChatBot.Modules
       [Summary("filename", "Optional filename to search for a specific file")] string filename = null
     )
     {
+      await DeferAsync(ephemeral: true);
+
       if (string.IsNullOrEmpty(filename))
       {
         if (!ulong.TryParse(messageId, out var msgId))
         {
-          await RespondAsync("Invalid message ID!", ephemeral: true);
+          await FollowupAsync("Invalid message ID!", ephemeral: true);
           return;
         }
 
-        string error; 
+        string error;
         (filename, error) = await TryGetStaticFilename(Context, msgId);
         if (filename == null)
         {
-          await RespondAsync(error, ephemeral: true);
+          await FollowupAsync(error, ephemeral: true);
           return;
         }
       }
@@ -218,9 +224,68 @@ namespace ChatBot.Modules
         case "video": response = await _videoService.UntagAsync(dto); break;
         case "audio": response = await _audioService.UntagAsync(dto); break;
         default:
-          await RespondAsync($"Unknown type '{type}'.", ephemeral: true); return;
+          await FollowupAsync($"Unknown type '{type}'.", ephemeral: true); return;
       }
-      await RespondAsync(response, ephemeral: true);
+      await FollowupAsync(response, ephemeral: true);
+    }
+
+    [SlashCommand("add", "Add a keyword")]
+    public async Task AddAsync(
+    [Summary("name", "The keyword name")] string name,
+    [Summary("message", "The message for the keyword")] string message)
+    {
+      await DeferAsync(ephemeral: true);
+      await _keywordService.PostAsync(name, Context.Guild.Id, Context.User.Id, message);
+      await FollowupAsync("Added keyword.", ephemeral: true);
+    }
+
+    [SlashCommand("delete", "Delete a file by type and message id")]
+    public async Task DeleteFileAsync(
+      [Autocomplete(typeof(MediaTypeAutocompleteHandler))]
+      [Summary("type", "The type of file: 'image', 'video', or 'audio'.")] string type,
+      [Summary("id", "The id of the message with the file to delete")] string messageId,
+      [Summary("filename", "Optional filename to search for a specific file")] string filename = null
+    )
+    {
+      await DeferAsync(ephemeral: true);
+
+      if (string.IsNullOrEmpty(filename))
+      {
+        if (!ulong.TryParse(messageId, out var msgId))
+        {
+          await FollowupAsync("Invalid message ID!", ephemeral: true);
+          return;
+        }
+
+        string error;
+        (filename, error) = await TryGetStaticFilename(Context, msgId);
+        if (filename == null)
+        {
+          await FollowupAsync(error, ephemeral: true);
+          return;
+        }
+      }
+
+      string normalizedType = type.ToLowerInvariant();
+      string response;
+
+      switch (normalizedType)
+      {
+        case "image":
+          response = await _imageService.DeleteAsync(Context.Guild.Id, filename);
+          break;
+        case "video":
+          response = await _videoService.DeleteAsync(Context.Guild.Id, filename);
+          break;
+        case "audio":
+          response = await _audioService.DeleteAsync(Context.Guild.Id, filename);
+          break;
+        default:
+          await FollowupAsync($"Unknown type '{type}'. Please use 'image', 'video', or 'audio'.", ephemeral: true);
+          return;
+      }
+
+      await FollowupAsync(response, ephemeral: true);
     }
 
     private async Task<(string filename, string error)> TryGetStaticFilename(SocketInteractionContext context, ulong messageId)
@@ -266,18 +331,9 @@ namespace ChatBot.Modules
       return regex.Matches(text).Select(m => m.Value);
     }
 
-    [SlashCommand("add", "Add a keyword")]
-    public async Task AddAsync(
-    [Summary("name", "The keyword name")] string name,
-    [Summary("message", "The message for the keyword")] string message)
-    {
-      await _keywordService.PostAsync(name, Context.Guild.Id, Context.User.Id, message);
-      await RespondAsync("Added keyword.", ephemeral: true);
-    }
-
     [SlashCommand("random", "Get a random image")]
     public async Task GetRandomImageAsync(
-    [Summary("tag", "Optional tag to search for a specific image")] string tag = null)
+      [Summary("tag", "Optional tag to search for a specific image")] string tag = null)
     {
       string image;
       if (string.IsNullOrWhiteSpace(tag))
@@ -290,7 +346,7 @@ namespace ChatBot.Modules
 
     [SlashCommand("vandom", "Get a random video")]
     public async Task GetRandomVideoAsync(
-        [Summary("tag", "Optional tag to search for a specific video")] string tag = null)
+      [Summary("tag", "Optional tag to search for a specific video")] string tag = null)
     {
       string video;
       if (string.IsNullOrWhiteSpace(tag))
@@ -303,7 +359,7 @@ namespace ChatBot.Modules
 
     [SlashCommand("aandom", "Get a random audio")]
     public async Task GetRandomAudioAsync(
-        [Summary("tag", "Optional tag to search for a specific audio")] string tag = null)
+      [Summary("tag", "Optional tag to search for a specific audio")] string tag = null)
     {
       string audio;
       if (string.IsNullOrWhiteSpace(tag))
@@ -312,53 +368,6 @@ namespace ChatBot.Modules
         audio = await _audioService.GetByTagAsync(Context.Guild.Id, tag);
 
       await RespondAsync(audio);
-    }
-
-    [SlashCommand("delete", "Delete a file by type and message id")]
-    public async Task DeleteFileAsync(
-      [Autocomplete(typeof(MediaTypeAutocompleteHandler))]
-      [Summary("type", "The type of file: 'image', 'video', or 'audio'.")] string type,
-      [Summary("id", "The id of the message with the file to delete")] string messageId,
-      [Summary("filename", "Optional filename to search for a specific file")] string filename = null
-    )
-    {
-      if (string.IsNullOrEmpty(filename))
-      {
-        if (!ulong.TryParse(messageId, out var msgId))
-        {
-          await RespondAsync("Invalid message ID!", ephemeral: true);
-          return;
-        }
-
-        string error; 
-        (filename, error) = await TryGetStaticFilename(Context, msgId);
-        if (filename == null)
-        {
-          await RespondAsync(error, ephemeral: true);
-          return;
-        }
-      }
-
-      string normalizedType = type.ToLowerInvariant();
-      string response;
-
-      switch (normalizedType)
-      {
-        case "image":
-          response = await _imageService.DeleteAsync(Context.Guild.Id, filename);
-          break;
-        case "video":
-          response = await _videoService.DeleteAsync(Context.Guild.Id, filename);
-          break;
-        case "audio":
-          response = await _audioService.DeleteAsync(Context.Guild.Id, filename);
-          break;
-        default:
-          await RespondAsync($"Unknown type '{type}'. Please use 'image', 'video', or 'audio'.", ephemeral: true);
-          return;
-      }
-
-      await RespondAsync(response, ephemeral: true);
     }
   }
 }
