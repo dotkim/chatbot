@@ -36,7 +36,16 @@ public class ApiClient
     return JsonSerializer.Deserialize<Message>(jsonResponse);
   }
 
-  public async void PostKeywordAsync(string name, long guildId, long uploaderId, string text)
+  public async Task<string> PutAsync(string route, string body)
+  {
+    var content = new StringContent(body, Encoding.UTF8, "application/json");
+    using HttpResponseMessage response = await _client.PutAsync(route, content);
+    response.EnsureSuccessStatusCode();
+
+    return await response.Content.ReadAsStringAsync();
+  }
+
+  public async Task PostKeywordAsync(string name, long guildId, long uploaderId, string text)
   {
     Keyword keyword = new() { Name = name, GuildId = guildId, UploaderId = uploaderId };
 
@@ -64,5 +73,13 @@ public class ApiClient
 
     var jsonResponse = await response.Content.ReadAsStringAsync();
     return jsonResponse;
+  }
+
+  public async Task<string> DeleteFileAsync(string route)
+  {
+    using HttpResponseMessage response = await _client.DeleteAsync(route);
+    response.EnsureSuccessStatusCode();
+
+    return await response.Content.ReadAsStringAsync();
   }
 }
