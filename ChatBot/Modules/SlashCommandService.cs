@@ -117,8 +117,8 @@ namespace ChatBot.Modules
     // Generic formatter for Image, Video, or Audio types
     private static string FormatMediaInfo(dynamic media, string label)
     {
-      var tags = (media.Tags?.Count ?? 0) > 0
-        ? string.Join(", ", media.Tags.Select((Func<dynamic, string>)(t => t.Name)))
+      var tags = (media.Tags != null && media.Tags.Count > 0)
+        ? string.Join(", ", ((IEnumerable<Tag>)media.Tags).Select(t => t.Name))
         : "None";
 
       return
